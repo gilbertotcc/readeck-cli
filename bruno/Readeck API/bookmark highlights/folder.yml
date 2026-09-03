@@ -1,0 +1,6 @@
+info:
+  name: bookmark highlights
+  type: folder
+
+request:
+  auth: inherit

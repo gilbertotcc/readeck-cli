@@ -1,0 +1,6 @@
+info:
+  name: bookmarks
+  type: folder
+
+request:
+  auth: inherit

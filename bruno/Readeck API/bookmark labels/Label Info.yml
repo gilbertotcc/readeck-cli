@@ -1,0 +1,102 @@
+info:
+  name: Label Info
+  type: http
+  seq: 2
+  tags:
+    - bookmark labels
+
+http:
+  method: GET
+  url: "{{baseUrl}}/bookmarks/labels?name=:name"
+  params:
+    - name: name
+      value: ""
+      type: path
+      description: Label
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
+
+examples:
+  - name: 200 Response
+    description: Label information
+    request:
+      url: "{{baseUrl}}/bookmarks/labels?name=:name"
+      method: GET
+      params:
+        - name: name
+          value: ""
+          type: path
+          description: Label
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          [
+            {
+              "name": "",
+              "count": 0,
+              "href": "",
+              "href_bookmarks": ""
+            }
+          ]
+  - name: 401 Response
+    description: |
+      Unauthorized. The request token found in the Authorization header is not valid.
+    request:
+      url: "{{baseUrl}}/bookmarks/labels?name=:name"
+      method: GET
+      params:
+        - name: name
+          value: ""
+          type: path
+          description: Label
+    response:
+      status: 401
+      statusText: Unauthorized
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "status": 0,
+            "message": ""
+          }
+  - name: 403 Response
+    description: |
+      Forbidden. The user doesn't have permission to perform the request but has other permissions.
+    request:
+      url: "{{baseUrl}}/bookmarks/labels?name=:name"
+      method: GET
+      params:
+        - name: name
+          value: ""
+          type: path
+          description: Label
+    response:
+      status: 403
+      statusText: Forbidden
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "status": 0,
+            "message": ""
+          }
+
+docs: This route returns information about a given bookmark label.

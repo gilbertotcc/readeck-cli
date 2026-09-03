@@ -1,0 +1,68 @@
+info:
+  name: Information
+  type: http
+  seq: 1
+  tags:
+    - info
+
+http:
+  method: GET
+  url: "{{baseUrl}}/info"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
+
+examples:
+  - name: 200 Response
+    description: Server information
+    request:
+      url: "{{baseUrl}}/info"
+      method: GET
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "version": {
+              "canonical": "",
+              "release": "",
+              "build": ""
+            },
+            "features": [
+              "email"
+            ]
+          }
+
+docs: |
+  This route returns public information about the Readeck instance.
+
+  The `version` entry contains information about the currently running version, with
+  the following fields:
+
+  | Name        | Description
+  | :---------- | :----------
+  | `release`   | The major + minor + patch number
+  | `canonical` | The full version; release + build number
+  | `build`     | The build number, if any.
+
+  On a stable release, `build` is empty and `release` is the same as `canonical`. On a nightly
+  build, `build` contains the commit information. It looks like `175-g154ad5c1` where the
+  first number is always incrementing one version after another.
+
+  `features` is a list that advertises the available features. It can contain the following
+  values:
+
+  | Name        | Description
+  | :---------- | :----------
+  | `email`     | This instance can send emails
+  | `oauth`     | This instance support OAuth

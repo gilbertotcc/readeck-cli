@@ -1,0 +1,6 @@
+info:
+  name: dev tools
+  type: folder
+
+request:
+  auth: inherit

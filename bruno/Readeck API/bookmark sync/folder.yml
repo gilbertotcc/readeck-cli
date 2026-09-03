@@ -1,0 +1,6 @@
+info:
+  name: bookmark sync
+  type: folder
+
+request:
+  auth: inherit

@@ -1,0 +1,209 @@
+info:
+  name: Extract Link with content
+  type: http
+  seq: 2
+  tags:
+    - dev tools
+
+http:
+  method: POST
+  url: "{{baseUrl}}/cookbook/extract"
+  headers:
+    - name: Accept
+      value: application/json
+      disabled: true
+    - name: Accept
+      value: text/html
+      disabled: true
+  body:
+    type: json
+    data: |-
+      {
+        "url": "",
+        "html": ""
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
+
+examples:
+  - name: 200 Response
+    description: |
+      Extraction result.
+    request:
+      url: "{{baseUrl}}/cookbook/extract"
+      method: POST
+      headers:
+        - name: Accept
+          value: application/json
+          disabled: true
+        - name: Accept
+          value: text/html
+          disabled: true
+      body:
+        type: json
+        data: |-
+          {
+            "url": "",
+            "html": ""
+          }
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "url": "",
+            "logs": [],
+            "errors": [],
+            "meta": {},
+            "properties": {
+              "json-ld": [
+                {}
+              ],
+              "link": [
+                {}
+              ],
+              "meta": [
+                {}
+              ]
+            },
+            "domain": "",
+            "title": "",
+            "authors": "",
+            "site": "",
+            "site_name": "",
+            "lang": "",
+            "text_direction": "rtl",
+            "date": "",
+            "document_type": "",
+            "description": "",
+            "html": "",
+            "embed": "",
+            "images": {
+              "additionalProperties": {
+                "size": "",
+                "encoded": ""
+              }
+            }
+          }
+  - name: 200 Response
+    description: |
+      Extraction result.
+    request:
+      url: "{{baseUrl}}/cookbook/extract"
+      method: POST
+      headers:
+        - name: Accept
+          value: application/json
+          disabled: true
+        - name: Accept
+          value: text/html
+          disabled: true
+      body:
+        type: json
+        data: |-
+          {
+            "url": "",
+            "html": ""
+          }
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: text/html
+      body:
+        type: html
+        data: ""
+  - name: 401 Response
+    description: |
+      Unauthorized. The request token found in the Authorization header is not valid.
+    request:
+      url: "{{baseUrl}}/cookbook/extract"
+      method: POST
+      headers:
+        - name: Accept
+          value: application/json
+          disabled: true
+        - name: Accept
+          value: text/html
+          disabled: true
+      body:
+        type: json
+        data: |-
+          {
+            "url": "",
+            "html": ""
+          }
+    response:
+      status: 401
+      statusText: Unauthorized
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "status": 0,
+            "message": ""
+          }
+  - name: 403 Response
+    description: |
+      Forbidden. The user doesn't have permission to perform the request but has other permissions.
+    request:
+      url: "{{baseUrl}}/cookbook/extract"
+      method: POST
+      headers:
+        - name: Accept
+          value: application/json
+          disabled: true
+        - name: Accept
+          value: text/html
+          disabled: true
+      body:
+        type: json
+        data: |-
+          {
+            "url": "",
+            "html": ""
+          }
+    response:
+      status: 403
+      statusText: Forbidden
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "status": 0,
+            "message": ""
+          }
+
+docs: |
+  This route extracts a link and returns the extraction result.
+
+  You can pass an `Accept` header to the request, with one of the following values:
+
+  - `application/json` (default) returns a JSON response
+  - `text/html` returns an HTML response with all the media included as base64 encoded
+    URLs.
+
+  To pass the entire contents of a page together with its url, send this request with
+  the `html` field in the request body. This way, the article fetcher can use that instead
+  of having to fetch the page at url.
+
+  You can send this request as `application/json`, `application/x-www-form-urlencoded` or
+  `multipart/form-data`.

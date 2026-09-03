@@ -1,0 +1,122 @@
+info:
+  name: Revoke Token
+  type: http
+  seq: 4
+  tags:
+    - oauth
+
+http:
+  method: POST
+  url: "{{baseUrl}}/oauth/revoke"
+  body:
+    type: json
+    data: |-
+      {
+        "token": ""
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
+
+examples:
+  - name: 200 Response
+    description: Access token revoked
+    request:
+      url: "{{baseUrl}}/oauth/revoke"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "token": ""
+          }
+    response:
+      status: 200
+      statusText: OK
+      body:
+        type: text
+        data: ""
+  - name: 400 Response
+    request:
+      url: "{{baseUrl}}/oauth/revoke"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "token": ""
+          }
+    response:
+      status: 400
+      statusText: Bad Request
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "error": "access_denied",
+            "error_description": ""
+          }
+  - name: 401 Response
+    description: |
+      Unauthorized. The request token found in the Authorization header is not valid.
+    request:
+      url: "{{baseUrl}}/oauth/revoke"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "token": ""
+          }
+    response:
+      status: 401
+      statusText: Unauthorized
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "status": 0,
+            "message": ""
+          }
+  - name: 403 Response
+    description: |
+      Forbidden. The user doesn't have permission to perform the request but has other permissions.
+    request:
+      url: "{{baseUrl}}/oauth/revoke"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "token": ""
+          }
+    response:
+      status: 403
+      statusText: Forbidden
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "status": 0,
+            "message": ""
+          }
+
+docs: |
+  This route lets a client revokes an access token. It must authenticate using the same
+  access token than the one provided in the request body.
+
+  You can use this route if you want to provide a log-out option to users.

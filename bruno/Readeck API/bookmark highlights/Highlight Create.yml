@@ -1,0 +1,187 @@
+info:
+  name: Highlight Create
+  type: http
+  seq: 3
+  tags:
+    - bookmark highlights
+
+http:
+  method: POST
+  url: "{{baseUrl}}/bookmarks/:id/annotations"
+  params:
+    - name: id
+      value: ""
+      type: path
+      description: Bookmark ID
+  body:
+    type: json
+    data: |-
+      {
+        "start_selector": "",
+        "start_offset": 0,
+        "end_selector": "",
+        "end_offset": 0,
+        "color": ""
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
+
+examples:
+  - name: 201 Response
+    description: Highlight created
+    request:
+      url: "{{baseUrl}}/bookmarks/:id/annotations"
+      method: POST
+      params:
+        - name: id
+          value: ""
+          type: path
+          description: Bookmark ID
+      body:
+        type: json
+        data: |-
+          {
+            "start_selector": "",
+            "start_offset": 0,
+            "end_selector": "",
+            "end_offset": 0,
+            "color": ""
+          }
+    response:
+      status: 201
+      statusText: Created
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "id": "",
+            "start_selector": "",
+            "start_offset": 0,
+            "end_selector": "",
+            "end_offset": 0,
+            "created": "",
+            "text": ""
+          }
+  - name: 401 Response
+    description: |
+      Unauthorized. The request token found in the Authorization header is not valid.
+    request:
+      url: "{{baseUrl}}/bookmarks/:id/annotations"
+      method: POST
+      params:
+        - name: id
+          value: ""
+          type: path
+          description: Bookmark ID
+      body:
+        type: json
+        data: |-
+          {
+            "start_selector": "",
+            "start_offset": 0,
+            "end_selector": "",
+            "end_offset": 0,
+            "color": ""
+          }
+    response:
+      status: 401
+      statusText: Unauthorized
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "status": 0,
+            "message": ""
+          }
+  - name: 403 Response
+    description: |
+      Forbidden. The user doesn't have permission to perform the request but has other permissions.
+    request:
+      url: "{{baseUrl}}/bookmarks/:id/annotations"
+      method: POST
+      params:
+        - name: id
+          value: ""
+          type: path
+          description: Bookmark ID
+      body:
+        type: json
+        data: |-
+          {
+            "start_selector": "",
+            "start_offset": 0,
+            "end_selector": "",
+            "end_offset": 0,
+            "color": ""
+          }
+    response:
+      status: 403
+      statusText: Forbidden
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "status": 0,
+            "message": ""
+          }
+  - name: 422 Response
+    description: |
+      This HTTP response is sent when the input data is not valid. It contains an object
+      with all the detected errors.
+    request:
+      url: "{{baseUrl}}/bookmarks/:id/annotations"
+      method: POST
+      params:
+        - name: id
+          value: ""
+          type: path
+          description: Bookmark ID
+      body:
+        type: json
+        data: |-
+          {
+            "start_selector": "",
+            "start_offset": 0,
+            "end_selector": "",
+            "end_offset": 0,
+            "color": ""
+          }
+    response:
+      status: 422
+      statusText: Unprocessable Entity
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "is_valid": false,
+            "errors": "",
+            "fields": {}
+          }
+
+docs: |
+  This route creates a new highlight on a given bookmarks.
+
+  The highlight format is similar to the [Range API](https://developer.mozilla.org/en-US/docs/Web/API/Range)
+  with some differences:
+
+  - A range's start and end selectors are XPath selectors and must target an element.
+  - The offset is the text length from the begining of the selector, regardless of the traversed
+    potential children.

@@ -1,0 +1,8 @@
+name: Default
+variables:
+  - name: baseUrl
+    value: "{{process.env.READECK_BASE_URL}}"
+    description: ""
+  - name: token
+    value: "{{process.env.READECK_BEARER_TOKEN}}"
+    description: ""
