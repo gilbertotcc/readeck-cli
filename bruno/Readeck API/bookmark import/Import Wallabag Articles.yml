@@ -1,0 +1,152 @@
+info:
+  name: Import Wallabag Articles
+  type: http
+  seq: 9
+  tags:
+    - bookmark import
+
+http:
+  method: POST
+  url: "{{baseUrl}}/bookmarks/import/wallabag"
+  body:
+    type: json
+    data: |-
+      {
+        "url": "",
+        "username": "",
+        "password": "",
+        "client_id": "",
+        "client_secret": ""
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
+
+examples:
+  - name: 202 Response
+    request:
+      url: "{{baseUrl}}/bookmarks/import/wallabag"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "url": "",
+            "username": "",
+            "password": "",
+            "client_id": "",
+            "client_secret": ""
+          }
+    response:
+      status: 202
+      statusText: Accepted
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "status": 0,
+            "message": ""
+          }
+  - name: 401 Response
+    description: |
+      Unauthorized. The request token found in the Authorization header is not valid.
+    request:
+      url: "{{baseUrl}}/bookmarks/import/wallabag"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "url": "",
+            "username": "",
+            "password": "",
+            "client_id": "",
+            "client_secret": ""
+          }
+    response:
+      status: 401
+      statusText: Unauthorized
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "status": 0,
+            "message": ""
+          }
+  - name: 403 Response
+    description: |
+      Forbidden. The user doesn't have permission to perform the request but has other permissions.
+    request:
+      url: "{{baseUrl}}/bookmarks/import/wallabag"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "url": "",
+            "username": "",
+            "password": "",
+            "client_id": "",
+            "client_secret": ""
+          }
+    response:
+      status: 403
+      statusText: Forbidden
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "status": 0,
+            "message": ""
+          }
+  - name: 422 Response
+    description: |
+      This HTTP response is sent when the input data is not valid. It contains an object
+      with all the detected errors.
+    request:
+      url: "{{baseUrl}}/bookmarks/import/wallabag"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "url": "",
+            "username": "",
+            "password": "",
+            "client_id": "",
+            "client_secret": ""
+          }
+    response:
+      status: 422
+      statusText: Unprocessable Entity
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "is_valid": false,
+            "errors": "",
+            "fields": {}
+          }
+
+docs: |
+  This route imports articles from Wallabag using its API.
+
+  You must create an API client in Wallabag and use its "Client ID" and "Client Secret"
+  in this route's payload.

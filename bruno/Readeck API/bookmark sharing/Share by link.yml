@@ -1,0 +1,120 @@
+info:
+  name: Share by link
+  type: http
+  seq: 1
+  tags:
+    - bookmark sharing
+
+http:
+  method: GET
+  url: "{{baseUrl}}/bookmarks/:id/share/link"
+  params:
+    - name: id
+      value: ""
+      type: path
+      description: Bookmark ID
+    - name: with_notes
+      value: ""
+      type: query
+      description: Include annotations and notes
+      disabled: true
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
+
+examples:
+  - name: 200 Response
+    description: Public link information
+    request:
+      url: "{{baseUrl}}/bookmarks/:id/share/link"
+      method: GET
+      params:
+        - name: id
+          value: ""
+          type: path
+          description: Bookmark ID
+        - name: with_notes
+          value: ""
+          type: query
+          description: Include annotations and notes
+          disabled: true
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "url": "",
+            "expires": "",
+            "title": "",
+            "id": ""
+          }
+  - name: 401 Response
+    description: |
+      Unauthorized. The request token found in the Authorization header is not valid.
+    request:
+      url: "{{baseUrl}}/bookmarks/:id/share/link"
+      method: GET
+      params:
+        - name: id
+          value: ""
+          type: path
+          description: Bookmark ID
+        - name: with_notes
+          value: ""
+          type: query
+          description: Include annotations and notes
+          disabled: true
+    response:
+      status: 401
+      statusText: Unauthorized
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "status": 0,
+            "message": ""
+          }
+  - name: 403 Response
+    description: |
+      Forbidden. The user doesn't have permission to perform the request but has other permissions.
+    request:
+      url: "{{baseUrl}}/bookmarks/:id/share/link"
+      method: GET
+      params:
+        - name: id
+          value: ""
+          type: path
+          description: Bookmark ID
+        - name: with_notes
+          value: ""
+          type: query
+          description: Include annotations and notes
+          disabled: true
+    response:
+      status: 403
+      statusText: Forbidden
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "status": 0,
+            "message": ""
+          }
+
+docs: This route produces a publicly accessible link to share a bookmark.

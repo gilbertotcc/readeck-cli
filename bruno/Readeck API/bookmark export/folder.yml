@@ -1,0 +1,6 @@
+info:
+  name: bookmark export
+  type: folder
+
+request:
+  auth: inherit

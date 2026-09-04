@@ -1,0 +1,125 @@
+info:
+  name: Client Registration
+  type: http
+  seq: 1
+  tags:
+    - oauth
+
+http:
+  method: POST
+  url: "{{baseUrl}}/oauth/client"
+  body:
+    type: json
+    data: |-
+      {
+        "client_name": "",
+        "client_uri": "",
+        "logo_uri": "",
+        "software_id": "",
+        "software_version": "",
+        "redirect_uris": [],
+        "token_endpoint_auth_method": "none",
+        "grant_types": [
+          "authorization_code"
+        ],
+        "response_types": [
+          "code"
+        ]
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
+
+examples:
+  - name: 201 Response
+    request:
+      url: "{{baseUrl}}/oauth/client"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "client_name": "",
+            "client_uri": "",
+            "logo_uri": "",
+            "software_id": "",
+            "software_version": "",
+            "redirect_uris": [],
+            "token_endpoint_auth_method": "none",
+            "grant_types": [
+              "authorization_code"
+            ],
+            "response_types": [
+              "code"
+            ]
+          }
+    response:
+      status: 201
+      statusText: Created
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "client_id": "",
+            "client_name": "",
+            "client_uri": "",
+            "logo_uri": "",
+            "redirect_uris": [],
+            "software_id": "",
+            "software_version": "",
+            "token_endpoint_auth_method": "none",
+            "grant_types": "authorization_code",
+            "response_types": "code"
+          }
+  - name: 400 Response
+    request:
+      url: "{{baseUrl}}/oauth/client"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "client_name": "",
+            "client_uri": "",
+            "logo_uri": "",
+            "software_id": "",
+            "software_version": "",
+            "redirect_uris": [],
+            "token_endpoint_auth_method": "none",
+            "grant_types": [
+              "authorization_code"
+            ],
+            "response_types": [
+              "code"
+            ]
+          }
+    response:
+      status: 400
+      statusText: Bad Request
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "error": "access_denied",
+            "error_description": ""
+          }
+
+docs: |
+  This route creates a new OAuth client. You must create a new client before you can request permissions and receive a token.
+
+  Please refer to the [Client Registration Documentation](#overview--client-registration) for more details.
+
+  This route implements [RFC 7591: OAuth 2.0 Dynamic Client Registration Protocol](https://datatracker.ietf.org/doc/html/rfc7591).
+
+  Note: checks on `token_endpoint_auth_method` and `response_types` are enforced but their respective values are not used internaly.

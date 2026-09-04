@@ -1,0 +1,120 @@
+info:
+  name: User Profile
+  type: http
+  seq: 1
+  tags:
+    - user profile
+
+http:
+  method: GET
+  url: "{{baseUrl}}/profile"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
+
+examples:
+  - name: 200 Response
+    description: Profile information
+    request:
+      url: "{{baseUrl}}/profile"
+      method: GET
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "provider": {
+              "name": "bearer token",
+              "id": "YVfNreHpJLg4tkbQqnCDCh",
+              "application": "api doc",
+              "roles": [
+                "bookmarks:read",
+                "bookmarks:write",
+                "profile:read"
+              ],
+              "permissions": [
+                "api:bookmarks:collections:read",
+                "api:bookmarks:collections:write",
+                "api:bookmarks:export",
+                "api:bookmarks:read",
+                "api:bookmarks:share",
+                "api:bookmarks:write",
+                "api:opds:read",
+                "api:profile:info",
+                "api:profile:read",
+                "api:profile:tokens:delete",
+                "bookmarks:read",
+                "email:send"
+              ]
+            },
+            "user": {
+              "username": "alice",
+              "email": "alice@localhost",
+              "created": "2023-08-27T13:32:11.704606963Z",
+              "updated": "2026-04-07T23:20:02.197979988Z",
+              "settings": {
+                "debug_info": false,
+                "lang": "en",
+                "addon_reminder": false,
+                "email_settings": {
+                  "reply_to": "",
+                  "epub_to": ""
+                }
+              }
+            }
+          }
+  - name: 401 Response
+    description: |
+      Unauthorized. The request token found in the Authorization header is not valid.
+    request:
+      url: "{{baseUrl}}/profile"
+      method: GET
+    response:
+      status: 401
+      statusText: Unauthorized
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "status": 0,
+            "message": ""
+          }
+  - name: 403 Response
+    description: |
+      Forbidden. The user doesn't have permission to perform the request but has other permissions.
+    request:
+      url: "{{baseUrl}}/profile"
+      method: GET
+    response:
+      status: 403
+      statusText: Forbidden
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "status": 0,
+            "message": ""
+          }
+
+docs: |
+  This route returns the current user's profile information. This includes the user information
+  and preferences, and the authentication provider with its permissions.
+
+  **Note**: This route is available with any OAuth scope but you only receive extended
+  profile information, such as `user.email`, with the `profile:read` scope.

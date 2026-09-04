@@ -1,0 +1,148 @@
+info:
+  name: Label Update
+  type: http
+  seq: 3
+  tags:
+    - bookmark labels
+
+http:
+  method: PATCH
+  url: "{{baseUrl}}/bookmarks/labels?name=:name"
+  params:
+    - name: name
+      value: ""
+      type: path
+      description: Label
+  body:
+    type: json
+    data: |-
+      {
+        "name": ""
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
+
+examples:
+  - name: 200 Response
+    description: Label renamed
+    request:
+      url: "{{baseUrl}}/bookmarks/labels?name=:name"
+      method: PATCH
+      params:
+        - name: name
+          value: ""
+          type: path
+          description: Label
+      body:
+        type: json
+        data: |-
+          {
+            "name": ""
+          }
+    response:
+      status: 200
+      statusText: OK
+      body:
+        type: text
+        data: ""
+  - name: 401 Response
+    description: |
+      Unauthorized. The request token found in the Authorization header is not valid.
+    request:
+      url: "{{baseUrl}}/bookmarks/labels?name=:name"
+      method: PATCH
+      params:
+        - name: name
+          value: ""
+          type: path
+          description: Label
+      body:
+        type: json
+        data: |-
+          {
+            "name": ""
+          }
+    response:
+      status: 401
+      statusText: Unauthorized
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "status": 0,
+            "message": ""
+          }
+  - name: 403 Response
+    description: |
+      Forbidden. The user doesn't have permission to perform the request but has other permissions.
+    request:
+      url: "{{baseUrl}}/bookmarks/labels?name=:name"
+      method: PATCH
+      params:
+        - name: name
+          value: ""
+          type: path
+          description: Label
+      body:
+        type: json
+        data: |-
+          {
+            "name": ""
+          }
+    response:
+      status: 403
+      statusText: Forbidden
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "status": 0,
+            "message": ""
+          }
+  - name: 422 Response
+    description: |
+      This HTTP response is sent when the input data is not valid. It contains an object
+      with all the detected errors.
+    request:
+      url: "{{baseUrl}}/bookmarks/labels?name=:name"
+      method: PATCH
+      params:
+        - name: name
+          value: ""
+          type: path
+          description: Label
+      body:
+        type: json
+        data: |-
+          {
+            "name": ""
+          }
+    response:
+      status: 422
+      statusText: Unprocessable Entity
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "is_valid": false,
+            "errors": "",
+            "fields": {}
+          }
+
+docs: |
+  This route renames a label.

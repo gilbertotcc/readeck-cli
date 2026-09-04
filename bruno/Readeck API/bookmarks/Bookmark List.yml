@@ -1,0 +1,1095 @@
+info:
+  name: Bookmark List
+  type: http
+  seq: 1
+  tags:
+    - bookmarks
+
+http:
+  method: GET
+  url: "{{baseUrl}}/bookmarks"
+  params:
+    - name: limit
+      value: ""
+      type: query
+      description: Number of items per page
+      disabled: true
+    - name: offset
+      value: ""
+      type: query
+      description: Pagination offset
+      disabled: true
+    - name: sort
+      value: created
+      type: query
+      description: Sorting parameters
+      disabled: true
+    - name: sort
+      value: -created
+      type: query
+      description: Sorting parameters
+      disabled: true
+    - name: sort
+      value: domain
+      type: query
+      description: Sorting parameters
+      disabled: true
+    - name: sort
+      value: -domain
+      type: query
+      description: Sorting parameters
+      disabled: true
+    - name: sort
+      value: duration
+      type: query
+      description: Sorting parameters
+      disabled: true
+    - name: sort
+      value: -duration
+      type: query
+      description: Sorting parameters
+      disabled: true
+    - name: sort
+      value: published
+      type: query
+      description: Sorting parameters
+      disabled: true
+    - name: sort
+      value: -published
+      type: query
+      description: Sorting parameters
+      disabled: true
+    - name: sort
+      value: site
+      type: query
+      description: Sorting parameters
+      disabled: true
+    - name: sort
+      value: -site
+      type: query
+      description: Sorting parameters
+      disabled: true
+    - name: sort
+      value: title
+      type: query
+      description: Sorting parameters
+      disabled: true
+    - name: sort
+      value: -title
+      type: query
+      description: Sorting parameters
+      disabled: true
+    - name: sort
+      value: random
+      type: query
+      description: Sorting parameters
+      disabled: true
+    - name: seed
+      value: "0"
+      type: query
+      description: |
+        Seed for random ordering.
+        Only needed when using `?sort=random`
+      disabled: true
+    - name: search
+      value: ""
+      type: query
+      description: A full text search string
+      disabled: true
+    - name: title
+      value: ""
+      type: query
+      description: Bookmark title
+      disabled: true
+    - name: author
+      value: ""
+      type: query
+      description: Author's name
+      disabled: true
+    - name: site
+      value: ""
+      type: query
+      description: Bookmark site name or domain
+      disabled: true
+    - name: lang
+      value: ""
+      type: query
+      description: Bookmark language code
+      disabled: true
+    - name: type
+      value: article
+      type: query
+      description: Bookmark type
+      disabled: true
+    - name: type
+      value: photo
+      type: query
+      description: Bookmark type
+      disabled: true
+    - name: type
+      value: video
+      type: query
+      description: Bookmark type
+      disabled: true
+    - name: labels
+      value: ""
+      type: query
+      description: One or several labels
+      disabled: true
+    - name: is_loaded
+      value: ""
+      type: query
+      description: Filter by loaded state
+      disabled: true
+    - name: has_errors
+      value: ""
+      type: query
+      description: Filter bookmarks with or without errors
+      disabled: true
+    - name: has_labels
+      value: ""
+      type: query
+      description: Filter bookmarks with or without labels
+      disabled: true
+    - name: has_notes
+      value: ""
+      type: query
+      description: Filter bookmarks with a note and/or annotations
+      disabled: true
+    - name: is_marked
+      value: ""
+      type: query
+      description: Filter by marked (favorite) status
+      disabled: true
+    - name: is_archived
+      value: ""
+      type: query
+      description: Filter by archived status
+      disabled: true
+    - name: range_start
+      value: ""
+      type: query
+      disabled: true
+    - name: range_end
+      value: ""
+      type: query
+      disabled: true
+    - name: read_status
+      value: unread
+      type: query
+      description: Read progress status
+      disabled: true
+    - name: read_status
+      value: reading
+      type: query
+      description: Read progress status
+      disabled: true
+    - name: read_status
+      value: read
+      type: query
+      description: Read progress status
+      disabled: true
+    - name: id
+      value: ""
+      type: query
+      description: One or more bookmark ID
+      disabled: true
+    - name: collection
+      value: ""
+      type: query
+      description: A collection ID
+      disabled: true
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
+
+examples:
+  - name: 200 Response
+    description: List of bookmark items
+    request:
+      url: "{{baseUrl}}/bookmarks"
+      method: GET
+      params:
+        - name: limit
+          value: ""
+          type: query
+          description: Number of items per page
+          disabled: true
+        - name: offset
+          value: ""
+          type: query
+          description: Pagination offset
+          disabled: true
+        - name: sort
+          value: created
+          type: query
+          description: Sorting parameters
+          disabled: true
+        - name: sort
+          value: -created
+          type: query
+          description: Sorting parameters
+          disabled: true
+        - name: sort
+          value: domain
+          type: query
+          description: Sorting parameters
+          disabled: true
+        - name: sort
+          value: -domain
+          type: query
+          description: Sorting parameters
+          disabled: true
+        - name: sort
+          value: duration
+          type: query
+          description: Sorting parameters
+          disabled: true
+        - name: sort
+          value: -duration
+          type: query
+          description: Sorting parameters
+          disabled: true
+        - name: sort
+          value: published
+          type: query
+          description: Sorting parameters
+          disabled: true
+        - name: sort
+          value: -published
+          type: query
+          description: Sorting parameters
+          disabled: true
+        - name: sort
+          value: site
+          type: query
+          description: Sorting parameters
+          disabled: true
+        - name: sort
+          value: -site
+          type: query
+          description: Sorting parameters
+          disabled: true
+        - name: sort
+          value: title
+          type: query
+          description: Sorting parameters
+          disabled: true
+        - name: sort
+          value: -title
+          type: query
+          description: Sorting parameters
+          disabled: true
+        - name: sort
+          value: random
+          type: query
+          description: Sorting parameters
+          disabled: true
+        - name: seed
+          value: "0"
+          type: query
+          description: |
+            Seed for random ordering.
+            Only needed when using `?sort=random`
+          disabled: true
+        - name: search
+          value: ""
+          type: query
+          description: A full text search string
+          disabled: true
+        - name: title
+          value: ""
+          type: query
+          description: Bookmark title
+          disabled: true
+        - name: author
+          value: ""
+          type: query
+          description: Author's name
+          disabled: true
+        - name: site
+          value: ""
+          type: query
+          description: Bookmark site name or domain
+          disabled: true
+        - name: lang
+          value: ""
+          type: query
+          description: Bookmark language code
+          disabled: true
+        - name: type
+          value: article
+          type: query
+          description: Bookmark type
+          disabled: true
+        - name: type
+          value: photo
+          type: query
+          description: Bookmark type
+          disabled: true
+        - name: type
+          value: video
+          type: query
+          description: Bookmark type
+          disabled: true
+        - name: labels
+          value: ""
+          type: query
+          description: One or several labels
+          disabled: true
+        - name: is_loaded
+          value: ""
+          type: query
+          description: Filter by loaded state
+          disabled: true
+        - name: has_errors
+          value: ""
+          type: query
+          description: Filter bookmarks with or without errors
+          disabled: true
+        - name: has_labels
+          value: ""
+          type: query
+          description: Filter bookmarks with or without labels
+          disabled: true
+        - name: has_notes
+          value: ""
+          type: query
+          description: Filter bookmarks with a note and/or annotations
+          disabled: true
+        - name: is_marked
+          value: ""
+          type: query
+          description: Filter by marked (favorite) status
+          disabled: true
+        - name: is_archived
+          value: ""
+          type: query
+          description: Filter by archived status
+          disabled: true
+        - name: range_start
+          value: ""
+          type: query
+          disabled: true
+        - name: range_end
+          value: ""
+          type: query
+          disabled: true
+        - name: read_status
+          value: unread
+          type: query
+          description: Read progress status
+          disabled: true
+        - name: read_status
+          value: reading
+          type: query
+          description: Read progress status
+          disabled: true
+        - name: read_status
+          value: read
+          type: query
+          description: Read progress status
+          disabled: true
+        - name: id
+          value: ""
+          type: query
+          description: One or more bookmark ID
+          disabled: true
+        - name: collection
+          value: ""
+          type: query
+          description: A collection ID
+          disabled: true
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          [
+            {
+              "id": "",
+              "href": "",
+              "created": "",
+              "updated": "",
+              "state": 0,
+              "loaded": false,
+              "url": "",
+              "title": "",
+              "site_name": "",
+              "site": "",
+              "published": "",
+              "authors": [],
+              "lang": "",
+              "text_direction": "ltr",
+              "document_type": "",
+              "type": "article",
+              "has_article": false,
+              "description": "",
+              "note": "",
+              "is_deleted": false,
+              "is_marked": false,
+              "is_archived": false,
+              "read_progress": 0,
+              "labels": [],
+              "word_count": 0,
+              "reading_time": 0,
+              "resources": {
+                "article": {
+                  "src": ""
+                },
+                "icon": "",
+                "image": "",
+                "thumbnail": "",
+                "log": {
+                  "src": ""
+                },
+                "props": {
+                  "src": ""
+                }
+              }
+            }
+          ]
+  - name: 401 Response
+    description: |
+      Unauthorized. The request token found in the Authorization header is not valid.
+    request:
+      url: "{{baseUrl}}/bookmarks"
+      method: GET
+      params:
+        - name: limit
+          value: ""
+          type: query
+          description: Number of items per page
+          disabled: true
+        - name: offset
+          value: ""
+          type: query
+          description: Pagination offset
+          disabled: true
+        - name: sort
+          value: created
+          type: query
+          description: Sorting parameters
+          disabled: true
+        - name: sort
+          value: -created
+          type: query
+          description: Sorting parameters
+          disabled: true
+        - name: sort
+          value: domain
+          type: query
+          description: Sorting parameters
+          disabled: true
+        - name: sort
+          value: -domain
+          type: query
+          description: Sorting parameters
+          disabled: true
+        - name: sort
+          value: duration
+          type: query
+          description: Sorting parameters
+          disabled: true
+        - name: sort
+          value: -duration
+          type: query
+          description: Sorting parameters
+          disabled: true
+        - name: sort
+          value: published
+          type: query
+          description: Sorting parameters
+          disabled: true
+        - name: sort
+          value: -published
+          type: query
+          description: Sorting parameters
+          disabled: true
+        - name: sort
+          value: site
+          type: query
+          description: Sorting parameters
+          disabled: true
+        - name: sort
+          value: -site
+          type: query
+          description: Sorting parameters
+          disabled: true
+        - name: sort
+          value: title
+          type: query
+          description: Sorting parameters
+          disabled: true
+        - name: sort
+          value: -title
+          type: query
+          description: Sorting parameters
+          disabled: true
+        - name: sort
+          value: random
+          type: query
+          description: Sorting parameters
+          disabled: true
+        - name: seed
+          value: "0"
+          type: query
+          description: |
+            Seed for random ordering.
+            Only needed when using `?sort=random`
+          disabled: true
+        - name: search
+          value: ""
+          type: query
+          description: A full text search string
+          disabled: true
+        - name: title
+          value: ""
+          type: query
+          description: Bookmark title
+          disabled: true
+        - name: author
+          value: ""
+          type: query
+          description: Author's name
+          disabled: true
+        - name: site
+          value: ""
+          type: query
+          description: Bookmark site name or domain
+          disabled: true
+        - name: lang
+          value: ""
+          type: query
+          description: Bookmark language code
+          disabled: true
+        - name: type
+          value: article
+          type: query
+          description: Bookmark type
+          disabled: true
+        - name: type
+          value: photo
+          type: query
+          description: Bookmark type
+          disabled: true
+        - name: type
+          value: video
+          type: query
+          description: Bookmark type
+          disabled: true
+        - name: labels
+          value: ""
+          type: query
+          description: One or several labels
+          disabled: true
+        - name: is_loaded
+          value: ""
+          type: query
+          description: Filter by loaded state
+          disabled: true
+        - name: has_errors
+          value: ""
+          type: query
+          description: Filter bookmarks with or without errors
+          disabled: true
+        - name: has_labels
+          value: ""
+          type: query
+          description: Filter bookmarks with or without labels
+          disabled: true
+        - name: has_notes
+          value: ""
+          type: query
+          description: Filter bookmarks with a note and/or annotations
+          disabled: true
+        - name: is_marked
+          value: ""
+          type: query
+          description: Filter by marked (favorite) status
+          disabled: true
+        - name: is_archived
+          value: ""
+          type: query
+          description: Filter by archived status
+          disabled: true
+        - name: range_start
+          value: ""
+          type: query
+          disabled: true
+        - name: range_end
+          value: ""
+          type: query
+          disabled: true
+        - name: read_status
+          value: unread
+          type: query
+          description: Read progress status
+          disabled: true
+        - name: read_status
+          value: reading
+          type: query
+          description: Read progress status
+          disabled: true
+        - name: read_status
+          value: read
+          type: query
+          description: Read progress status
+          disabled: true
+        - name: id
+          value: ""
+          type: query
+          description: One or more bookmark ID
+          disabled: true
+        - name: collection
+          value: ""
+          type: query
+          description: A collection ID
+          disabled: true
+    response:
+      status: 401
+      statusText: Unauthorized
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "status": 0,
+            "message": ""
+          }
+  - name: 403 Response
+    description: |
+      Forbidden. The user doesn't have permission to perform the request but has other permissions.
+    request:
+      url: "{{baseUrl}}/bookmarks"
+      method: GET
+      params:
+        - name: limit
+          value: ""
+          type: query
+          description: Number of items per page
+          disabled: true
+        - name: offset
+          value: ""
+          type: query
+          description: Pagination offset
+          disabled: true
+        - name: sort
+          value: created
+          type: query
+          description: Sorting parameters
+          disabled: true
+        - name: sort
+          value: -created
+          type: query
+          description: Sorting parameters
+          disabled: true
+        - name: sort
+          value: domain
+          type: query
+          description: Sorting parameters
+          disabled: true
+        - name: sort
+          value: -domain
+          type: query
+          description: Sorting parameters
+          disabled: true
+        - name: sort
+          value: duration
+          type: query
+          description: Sorting parameters
+          disabled: true
+        - name: sort
+          value: -duration
+          type: query
+          description: Sorting parameters
+          disabled: true
+        - name: sort
+          value: published
+          type: query
+          description: Sorting parameters
+          disabled: true
+        - name: sort
+          value: -published
+          type: query
+          description: Sorting parameters
+          disabled: true
+        - name: sort
+          value: site
+          type: query
+          description: Sorting parameters
+          disabled: true
+        - name: sort
+          value: -site
+          type: query
+          description: Sorting parameters
+          disabled: true
+        - name: sort
+          value: title
+          type: query
+          description: Sorting parameters
+          disabled: true
+        - name: sort
+          value: -title
+          type: query
+          description: Sorting parameters
+          disabled: true
+        - name: sort
+          value: random
+          type: query
+          description: Sorting parameters
+          disabled: true
+        - name: seed
+          value: "0"
+          type: query
+          description: |
+            Seed for random ordering.
+            Only needed when using `?sort=random`
+          disabled: true
+        - name: search
+          value: ""
+          type: query
+          description: A full text search string
+          disabled: true
+        - name: title
+          value: ""
+          type: query
+          description: Bookmark title
+          disabled: true
+        - name: author
+          value: ""
+          type: query
+          description: Author's name
+          disabled: true
+        - name: site
+          value: ""
+          type: query
+          description: Bookmark site name or domain
+          disabled: true
+        - name: lang
+          value: ""
+          type: query
+          description: Bookmark language code
+          disabled: true
+        - name: type
+          value: article
+          type: query
+          description: Bookmark type
+          disabled: true
+        - name: type
+          value: photo
+          type: query
+          description: Bookmark type
+          disabled: true
+        - name: type
+          value: video
+          type: query
+          description: Bookmark type
+          disabled: true
+        - name: labels
+          value: ""
+          type: query
+          description: One or several labels
+          disabled: true
+        - name: is_loaded
+          value: ""
+          type: query
+          description: Filter by loaded state
+          disabled: true
+        - name: has_errors
+          value: ""
+          type: query
+          description: Filter bookmarks with or without errors
+          disabled: true
+        - name: has_labels
+          value: ""
+          type: query
+          description: Filter bookmarks with or without labels
+          disabled: true
+        - name: has_notes
+          value: ""
+          type: query
+          description: Filter bookmarks with a note and/or annotations
+          disabled: true
+        - name: is_marked
+          value: ""
+          type: query
+          description: Filter by marked (favorite) status
+          disabled: true
+        - name: is_archived
+          value: ""
+          type: query
+          description: Filter by archived status
+          disabled: true
+        - name: range_start
+          value: ""
+          type: query
+          disabled: true
+        - name: range_end
+          value: ""
+          type: query
+          disabled: true
+        - name: read_status
+          value: unread
+          type: query
+          description: Read progress status
+          disabled: true
+        - name: read_status
+          value: reading
+          type: query
+          description: Read progress status
+          disabled: true
+        - name: read_status
+          value: read
+          type: query
+          description: Read progress status
+          disabled: true
+        - name: id
+          value: ""
+          type: query
+          description: One or more bookmark ID
+          disabled: true
+        - name: collection
+          value: ""
+          type: query
+          description: A collection ID
+          disabled: true
+    response:
+      status: 403
+      statusText: Forbidden
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "status": 0,
+            "message": ""
+          }
+  - name: 422 Response
+    description: |
+      This HTTP response is sent when the input data is not valid. It contains an object
+      with all the detected errors.
+    request:
+      url: "{{baseUrl}}/bookmarks"
+      method: GET
+      params:
+        - name: limit
+          value: ""
+          type: query
+          description: Number of items per page
+          disabled: true
+        - name: offset
+          value: ""
+          type: query
+          description: Pagination offset
+          disabled: true
+        - name: sort
+          value: created
+          type: query
+          description: Sorting parameters
+          disabled: true
+        - name: sort
+          value: -created
+          type: query
+          description: Sorting parameters
+          disabled: true
+        - name: sort
+          value: domain
+          type: query
+          description: Sorting parameters
+          disabled: true
+        - name: sort
+          value: -domain
+          type: query
+          description: Sorting parameters
+          disabled: true
+        - name: sort
+          value: duration
+          type: query
+          description: Sorting parameters
+          disabled: true
+        - name: sort
+          value: -duration
+          type: query
+          description: Sorting parameters
+          disabled: true
+        - name: sort
+          value: published
+          type: query
+          description: Sorting parameters
+          disabled: true
+        - name: sort
+          value: -published
+          type: query
+          description: Sorting parameters
+          disabled: true
+        - name: sort
+          value: site
+          type: query
+          description: Sorting parameters
+          disabled: true
+        - name: sort
+          value: -site
+          type: query
+          description: Sorting parameters
+          disabled: true
+        - name: sort
+          value: title
+          type: query
+          description: Sorting parameters
+          disabled: true
+        - name: sort
+          value: -title
+          type: query
+          description: Sorting parameters
+          disabled: true
+        - name: sort
+          value: random
+          type: query
+          description: Sorting parameters
+          disabled: true
+        - name: seed
+          value: "0"
+          type: query
+          description: |
+            Seed for random ordering.
+            Only needed when using `?sort=random`
+          disabled: true
+        - name: search
+          value: ""
+          type: query
+          description: A full text search string
+          disabled: true
+        - name: title
+          value: ""
+          type: query
+          description: Bookmark title
+          disabled: true
+        - name: author
+          value: ""
+          type: query
+          description: Author's name
+          disabled: true
+        - name: site
+          value: ""
+          type: query
+          description: Bookmark site name or domain
+          disabled: true
+        - name: lang
+          value: ""
+          type: query
+          description: Bookmark language code
+          disabled: true
+        - name: type
+          value: article
+          type: query
+          description: Bookmark type
+          disabled: true
+        - name: type
+          value: photo
+          type: query
+          description: Bookmark type
+          disabled: true
+        - name: type
+          value: video
+          type: query
+          description: Bookmark type
+          disabled: true
+        - name: labels
+          value: ""
+          type: query
+          description: One or several labels
+          disabled: true
+        - name: is_loaded
+          value: ""
+          type: query
+          description: Filter by loaded state
+          disabled: true
+        - name: has_errors
+          value: ""
+          type: query
+          description: Filter bookmarks with or without errors
+          disabled: true
+        - name: has_labels
+          value: ""
+          type: query
+          description: Filter bookmarks with or without labels
+          disabled: true
+        - name: has_notes
+          value: ""
+          type: query
+          description: Filter bookmarks with a note and/or annotations
+          disabled: true
+        - name: is_marked
+          value: ""
+          type: query
+          description: Filter by marked (favorite) status
+          disabled: true
+        - name: is_archived
+          value: ""
+          type: query
+          description: Filter by archived status
+          disabled: true
+        - name: range_start
+          value: ""
+          type: query
+          disabled: true
+        - name: range_end
+          value: ""
+          type: query
+          disabled: true
+        - name: read_status
+          value: unread
+          type: query
+          description: Read progress status
+          disabled: true
+        - name: read_status
+          value: reading
+          type: query
+          description: Read progress status
+          disabled: true
+        - name: read_status
+          value: read
+          type: query
+          description: Read progress status
+          disabled: true
+        - name: id
+          value: ""
+          type: query
+          description: One or more bookmark ID
+          disabled: true
+        - name: collection
+          value: ""
+          type: query
+          description: A collection ID
+          disabled: true
+    response:
+      status: 422
+      statusText: Unprocessable Entity
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "is_valid": false,
+            "errors": "",
+            "fields": {}
+          }
+
+docs: |
+  This route returns a paginated bookmark list.

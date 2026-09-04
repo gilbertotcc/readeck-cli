@@ -1,0 +1,86 @@
+info:
+  name: Device Authorization
+  type: http
+  seq: 3
+  tags:
+    - oauth
+
+http:
+  method: POST
+  url: "{{baseUrl}}/oauth/device"
+  body:
+    type: json
+    data: |-
+      {
+        "client_id": "",
+        "scope": ""
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
+
+examples:
+  - name: 200 Response
+    description: Device Authorization Response
+    request:
+      url: "{{baseUrl}}/oauth/device"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "client_id": "",
+            "scope": ""
+          }
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "device_code": "",
+            "user_code": "",
+            "verification_uri": "",
+            "verification_uri_complete": "",
+            "expires_in": 0,
+            "interval": 0
+          }
+  - name: 400 Response
+    request:
+      url: "{{baseUrl}}/oauth/device"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "client_id": "",
+            "scope": ""
+          }
+    response:
+      status: 400
+      statusText: Bad Request
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "error": "access_denied",
+            "error_description": ""
+          }
+
+docs: |
+  This route is the device authorization request. A client must call it first,
+  with its client ID and a scope list it wants to grant a device.
+
+  Please refer to [OAuth Device Code Flow](#overview--oauth-device-code-flow) for more information.

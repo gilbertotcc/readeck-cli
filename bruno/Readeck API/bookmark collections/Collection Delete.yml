@@ -1,0 +1,92 @@
+info:
+  name: Collection Delete
+  type: http
+  seq: 5
+  tags:
+    - bookmark collections
+
+http:
+  method: DELETE
+  url: "{{baseUrl}}/bookmarks/collections/:id"
+  params:
+    - name: id
+      value: ""
+      type: path
+      description: Collection ID
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
+
+examples:
+  - name: 204 Response
+    description: Collection deleted
+    request:
+      url: "{{baseUrl}}/bookmarks/collections/:id"
+      method: DELETE
+      params:
+        - name: id
+          value: ""
+          type: path
+          description: Collection ID
+    response:
+      status: 204
+      statusText: No Content
+      body:
+        type: text
+        data: ""
+  - name: 401 Response
+    description: |
+      Unauthorized. The request token found in the Authorization header is not valid.
+    request:
+      url: "{{baseUrl}}/bookmarks/collections/:id"
+      method: DELETE
+      params:
+        - name: id
+          value: ""
+          type: path
+          description: Collection ID
+    response:
+      status: 401
+      statusText: Unauthorized
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "status": 0,
+            "message": ""
+          }
+  - name: 403 Response
+    description: |
+      Forbidden. The user doesn't have permission to perform the request but has other permissions.
+    request:
+      url: "{{baseUrl}}/bookmarks/collections/:id"
+      method: DELETE
+      params:
+        - name: id
+          value: ""
+          type: path
+          description: Collection ID
+    response:
+      status: 403
+      statusText: Forbidden
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "status": 0,
+            "message": ""
+          }
+
+docs: |
+  This route deletes a given collection.

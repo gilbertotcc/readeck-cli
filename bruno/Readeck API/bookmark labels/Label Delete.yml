@@ -1,0 +1,94 @@
+info:
+  name: Label Delete
+  type: http
+  seq: 4
+  tags:
+    - bookmark labels
+
+http:
+  method: DELETE
+  url: "{{baseUrl}}/bookmarks/labels?name=:name"
+  params:
+    - name: name
+      value: ""
+      type: path
+      description: Label
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
+
+examples:
+  - name: 204 Response
+    description: Label removed
+    request:
+      url: "{{baseUrl}}/bookmarks/labels?name=:name"
+      method: DELETE
+      params:
+        - name: name
+          value: ""
+          type: path
+          description: Label
+    response:
+      status: 204
+      statusText: No Content
+      body:
+        type: text
+        data: ""
+  - name: 401 Response
+    description: |
+      Unauthorized. The request token found in the Authorization header is not valid.
+    request:
+      url: "{{baseUrl}}/bookmarks/labels?name=:name"
+      method: DELETE
+      params:
+        - name: name
+          value: ""
+          type: path
+          description: Label
+    response:
+      status: 401
+      statusText: Unauthorized
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "status": 0,
+            "message": ""
+          }
+  - name: 403 Response
+    description: |
+      Forbidden. The user doesn't have permission to perform the request but has other permissions.
+    request:
+      url: "{{baseUrl}}/bookmarks/labels?name=:name"
+      method: DELETE
+      params:
+        - name: name
+          value: ""
+          type: path
+          description: Label
+    response:
+      status: 403
+      statusText: Forbidden
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "status": 0,
+            "message": ""
+          }
+
+docs: |
+  This route remove a label from all associated bookmarks.
+
+  Please note that it does not remove the bookmarks themselves.
