@@ -1,6 +1,7 @@
 src = ["src"]
 line-length = 120
 target-version = "py314"
+extend-exclude = ["src/readeck_cli/infrastructure/readeck_client"]
 
 [lint]
 select = [
@@ -27,6 +28,8 @@ lines-after-imports = 2
 [lint.per-file-ignores]
 "tests/**/*" = [
     "S101", # allow `assert` in tests
+    "S105", # allow hardcoded dummy tokens/secrets in tests
+    "S106", # allow hardcoded dummy tokens/secrets in tests
     "S108", # allow hardcoded temp paths in tests
     "E501", # allow long lines in tests
     "FBT001", # allow boolean args in functions in tests

@@ -1,0 +1,16 @@
+# flake8: noqa
+
+# import apis into api package
+from readeck_cli.infrastructure.readeck_client.api.bookmark_collections_api import BookmarkCollectionsApi
+from readeck_cli.infrastructure.readeck_client.api.bookmark_export_api import BookmarkExportApi
+from readeck_cli.infrastructure.readeck_client.api.bookmark_highlights_api import BookmarkHighlightsApi
+from readeck_cli.infrastructure.readeck_client.api.bookmark_import_api import BookmarkImportApi
+from readeck_cli.infrastructure.readeck_client.api.bookmark_labels_api import BookmarkLabelsApi
+from readeck_cli.infrastructure.readeck_client.api.bookmark_sharing_api import BookmarkSharingApi
+from readeck_cli.infrastructure.readeck_client.api.bookmark_sync_api import BookmarkSyncApi
+from readeck_cli.infrastructure.readeck_client.api.bookmarks_api import BookmarksApi
+from readeck_cli.infrastructure.readeck_client.api.dev_tools_api import DevToolsApi
+from readeck_cli.infrastructure.readeck_client.api.info_api import InfoApi
+from readeck_cli.infrastructure.readeck_client.api.oauth_api import OauthApi
+from readeck_cli.infrastructure.readeck_client.api.user_profile_api import UserProfileApi
+

@@ -10,7 +10,9 @@ This repository is the seed of a future **Readeck CLI** (tested against Readeck
 actual CLI commands are implemented yet — `readeck_cli.main()` is still a
 placeholder. The `bruno/` API collection, reverse-engineered from Readeck's
 OpenAPI spec, is the reference for the API surface the CLI will eventually
-wrap.
+wrap. A generated Python API client plus a thin hand-written wrapper already
+exist under `src/readeck_cli/infrastructure/` (see below) for future CLI
+commands to build on.
 
 ## Repository layout
 
@@ -26,6 +28,14 @@ wrap.
   regenerates this collection from the downloaded OpenAPI spec.
 - `src/readeck_cli/` — the CLI package (`src` layout), installed as the
   `readeck-cli` entry point.
+- `src/readeck_cli/infrastructure/readeck_client/` — a Python client
+  generated from Readeck's OpenAPI spec via `openapi-generator`. Vendored
+  (committed) but never hand-edited — see "Working with the generated API
+  client" below.
+- `src/readeck_cli/infrastructure/client.py` — `ReadeckClient`, a small
+  hand-written wrapper around the generated client (base URL + Bearer token
+  configuration, one typed property per API area). This is regular
+  hand-written source, not generated.
 - `tests/` — pytest suite, mirroring `src/readeck_cli/`.
 - `pyproject.toml`, `uv.lock` — project metadata and dependency lockfile,
   managed with [uv](https://github.com/astral-sh/uv).
@@ -49,6 +59,25 @@ wrap.
 - Do not hand-edit the generated per-endpoint request files if the OpenAPI
   spec changes — resync via Bruno's OpenAPI sync (`bruno.openapi` config in
   `opencollection.yml`) instead, then review the diff.
+
+## Working with the generated API client
+
+- `src/readeck_cli/infrastructure/readeck_client/` is generated code — do not
+  hand-edit it. Regenerate it via the `openapi-generator` command documented
+  in the README's "Generating the API client" section, which also rewrites
+  the generated absolute imports (the generator assumes `readeck_client` is a
+  top-level package, not a nested one).
+- It is excluded from strict lint/type-checking (`extend-exclude` in
+  `ruff.toml`, a `[mypy-readeck_cli.infrastructure.readeck_client.*]`
+  `ignore_errors` override in `mypy.ini`) since generated openapi-generator
+  code cannot realistically satisfy this repo's strict ruleset. It is still
+  exercised by `tests/infrastructure/test_generated_client_imports.py`, which
+  imports every generated submodule as a regression check on regeneration.
+- `src/readeck_cli/infrastructure/client.py` (`ReadeckClient`) is hand-written
+  and must stay fully strict-clean and tested like the rest of `src/`. It
+  exposes the generated `*Api` classes directly (e.g. `client.bookmarks`) —
+  future CLI commands call operations on them; no per-operation wrapper
+  methods or docstrings are added on top.
 
 ## Readeck API basics
 
