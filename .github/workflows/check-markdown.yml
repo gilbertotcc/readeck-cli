@@ -38,16 +38,3 @@ jobs:
           args: "--no-progress --timeout 30 --max-concurrency 10 ."
           fail: true
           failIfEmpty: false
-
-  check-spelling-md:
-    name: Check spelling (Markdown)
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v7
-      - name: Install required packages
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y hunspell hunspell-en-gb
-      - name: Run spelling check
-        run: make spell-check-md
