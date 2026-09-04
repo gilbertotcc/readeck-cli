@@ -6,11 +6,11 @@ code in this repository.
 ## Project state
 
 This repository is the seed of a future **Readeck CLI** (tested against Readeck
-0.23.2). No CLI source code exists yet — the repository currently contains
-only a Bruno API collection reverse-engineered from Readeck's OpenAPI spec,
-which serves as the reference for the API surface the CLI will eventually
-wrap. When actual CLI code is added, this file should be updated with the
-language/toolchain, build/test/lint commands, and code architecture.
+0.23.2). The Python project scaffold exists (package, dev tooling, CI), but no
+actual CLI commands are implemented yet — `readeck_cli.main()` is still a
+placeholder. The `bruno/` API collection, reverse-engineered from Readeck's
+OpenAPI spec, is the reference for the API surface the CLI will eventually
+wrap.
 
 ## Repository layout
 
@@ -24,6 +24,25 @@ language/toolchain, build/test/lint commands, and code architecture.
   OAuth flows (Authorization Code and Device Code) and token-auth
   documentation for the Readeck API, and the `bruno.openapi` sync config that
   regenerates this collection from the downloaded OpenAPI spec.
+- `src/readeck_cli/` — the CLI package (`src` layout), installed as the
+  `readeck-cli` entry point.
+- `tests/` — pytest suite, mirroring `src/readeck_cli/`.
+- `pyproject.toml`, `uv.lock` — project metadata and dependency lockfile,
+  managed with [uv](https://github.com/astral-sh/uv).
+- `ruff.toml`, `mypy.ini`, `pytest.ini` — standalone tool configs (not
+  `[tool.*]` tables in `pyproject.toml`) for lint/format, type checking, and
+  tests, respectively.
+
+## Python tooling
+
+- Install dependencies: `uv sync --dev` (add `--dev` to get ruff/mypy/pytest).
+- Run the CLI: `uv run readeck-cli`.
+- Lint/format: `uv run ruff check` and `uv run ruff format --check`.
+- Type check: `uv run mypy src tests`.
+- Tests: `uv run pytest`.
+- All of the above run in CI on PRs/pushes to `main` touching Python files
+  (see `.github/workflows/check-python.yml`), as three separate jobs (lint,
+  typecheck, test).
 
 ## Working with the Bruno collection
 

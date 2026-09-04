@@ -1,0 +1,40 @@
+src = ["src"]
+line-length = 120
+target-version = "py314"
+
+[lint]
+select = [
+    "E", # pycodestyle errros
+    "W", # pycodestyle warning
+    "F",
+    "I", # isort
+    "B", # flake8-bugbear
+    "C4", # flake8-comprehensions
+    "UP", # pyupgrade
+    "N", # pep8-naming
+    "SIM", # flake8-simplify
+    "PERF", # performance
+    "RUF",
+    "S", # bandit
+    "FBT", # boolean-trap
+    "TCH", # typing-only imports
+    "FURB", # refurb
+]
+
+[lint.isort]
+lines-after-imports = 2
+
+[lint.per-file-ignores]
+"tests/**/*" = [
+    "S101", # allow `assert` in tests
+    "S108", # allow hardcoded temp paths in tests
+    "E501", # allow long lines in tests
+    "FBT001", # allow boolean args in functions in tests
+]
+
+[format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "auto"
+docstring-code-format = true
+skip-magic-trailing-comma = false
