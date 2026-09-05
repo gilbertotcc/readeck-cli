@@ -53,9 +53,17 @@ class ReadeckClient:
         """`GET /profile` — the current user's profile information."""
         return cast("dict[str, Any]", self._request("GET", "/profile"))
 
-    def _request(self, method: str, path: str) -> Any:
+    def get_share_link(self, bookmark_id: str, *, with_notes: bool = False) -> dict[str, Any]:
+        """`GET /bookmarks/{id}/share/link` — a public share link for a bookmark."""
+        params = {"with_notes": "true"} if with_notes else None
+        return cast(
+            "dict[str, Any]",
+            self._request("GET", f"/bookmarks/{bookmark_id}/share/link", params=params),
+        )
+
+    def _request(self, method: str, path: str, *, params: dict[str, Any] | None = None) -> Any:
         try:
-            response = self._http.request(method, path)
+            response = self._http.request(method, path, params=params)
         except httpx.HTTPError as exc:
             message = f"{method} {path} failed: {exc}"
             raise ReadeckClientError(message, request=exc.request) from exc
