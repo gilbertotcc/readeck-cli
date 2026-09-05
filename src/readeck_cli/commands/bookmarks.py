@@ -2,7 +2,13 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
 from readeck_cli.commands.errors import CommandError
-from readeck_cli.infrastructure.readeck_client import ReadeckClient, ReadeckClientConfig, ReadeckClientError
+from readeck_cli.infrastructure.readeck_client import (
+    PaginationInfo,
+    PaginationParams,
+    ReadeckClient,
+    ReadeckClientConfig,
+    ReadeckClientError,
+)
 
 
 if TYPE_CHECKING:
@@ -113,3 +119,57 @@ def _error_message(exc: ReadeckClientError) -> str:
     if isinstance(message, str) and message:
         return message
     return str(exc)
+
+
+@dataclass(frozen=True, slots=True)
+class Bookmark:
+    """A single bookmark, as summarized in a bookmark list."""
+
+    id: str
+    href: str
+    url: str
+    title: str
+    site: str
+    authors: tuple[str, ...]
+    description: str
+    note: str
+    labels: tuple[str, ...]
+
+
+def list_bookmarks(
+    credentials: ReadeckCredentials,
+    *,
+    search: str | None = None,
+    limit: int | None = None,
+    offset: int | None = None,
+    transport: httpx.BaseTransport | None = None,
+) -> tuple[list[Bookmark], PaginationInfo]:
+    """Fetch and parse a page of bookmarks from `GET /bookmarks`."""
+    try:
+        config = ReadeckClientConfig.from_params(base_url=credentials.base_url, api_token=credentials.api_token)
+    except ValueError as exc:
+        raise CommandError(str(exc)) from exc
+
+    pagination = PaginationParams(limit=limit, offset=offset)
+
+    try:
+        with ReadeckClient.from_config(config, transport=transport) as client:
+            payload, pagination_info = client.get_bookmarks(search=search, pagination=pagination)
+    except ReadeckClientError as exc:
+        raise CommandError(str(exc)) from exc
+
+    bookmarks = [
+        Bookmark(
+            id=item.get("id", ""),
+            href=item.get("href", ""),
+            url=item.get("url", ""),
+            title=item.get("title", ""),
+            site=item.get("site", ""),
+            authors=tuple(item.get("authors", [])),
+            description=item.get("description", ""),
+            note=item.get("note", ""),
+            labels=tuple(item.get("labels", [])),
+        )
+        for item in payload
+    ]
+    return bookmarks, pagination_info

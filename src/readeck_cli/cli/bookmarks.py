@@ -3,12 +3,12 @@ from typing import TYPE_CHECKING
 import click
 
 from readeck_cli.cli.output import render_records
-from readeck_cli.commands import CommandError, get_bookmark, get_share_link
+from readeck_cli.commands import CommandError, get_bookmark, get_share_link, list_bookmarks
 from readeck_cli.config import load_credentials
 
 
 if TYPE_CHECKING:
-    from readeck_cli.commands import BookmarkDetails
+    from readeck_cli.commands import Bookmark, BookmarkDetails, PaginationInfo
 
 
 @click.group(invoke_without_command=True)
@@ -98,3 +98,46 @@ def _format_bookmark(bookmark: BookmarkDetails) -> str:
         lines.extend(f"    - {link.title}: {link.url}" for link in bookmark.links)
 
     return "\n".join(lines)
+
+
+@bookmarks_group.command(name="list")
+@click.argument("search", required=False)
+@click.option("--limit", type=int, default=None, help="Number of items per page.")
+@click.option("--offset", type=int, default=None, help="Pagination offset.")
+@click.option("--json", "as_json", is_flag=True, help="Print raw JSON output.")
+def list_command(*, search: str | None, limit: int | None, offset: int | None, as_json: bool) -> None:
+    """List bookmarks, optionally filtered by SEARCH."""
+    credentials = load_credentials()
+
+    try:
+        bookmarks, pagination_info = list_bookmarks(credentials, search=search, limit=limit, offset=offset)
+    except CommandError as exc:
+        raise click.ClickException(str(exc)) from exc
+
+    records = [_to_record(bookmark, as_json=as_json) for bookmark in bookmarks]
+    output = render_records(records, as_json=as_json)
+    if output:
+        click.echo(output)
+
+    _echo_pagination_summary(bookmarks, pagination_info)
+
+
+def _to_record(bookmark: Bookmark, *, as_json: bool) -> dict[str, object]:
+    return {
+        "id": bookmark.id,
+        "href": bookmark.href,
+        "url": bookmark.url,
+        "title": bookmark.title,
+        "site": bookmark.site,
+        "authors": list(bookmark.authors) if as_json else ", ".join(bookmark.authors),
+        "description": bookmark.description,
+        "note": bookmark.note,
+        "labels": list(bookmark.labels) if as_json else ", ".join(bookmark.labels),
+    }
+
+
+def _echo_pagination_summary(bookmarks: list[Bookmark], pagination_info: PaginationInfo) -> None:
+    if pagination_info.total_pages <= 1:
+        return
+    summary = f"{len(bookmarks)} of {pagination_info.total_count} across {pagination_info.total_pages} page(s)"
+    click.echo(summary, err=True)
