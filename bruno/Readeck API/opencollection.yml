@@ -437,10 +437,3 @@ extensions:
     ignore:
       - node_modules
       - .git
-    openapi:
-      - sourceUrl: ../../tmp/openapi-spec.json
-        groupBy: tags
-        lastSyncDate: 2026-09-02T21:21:47.918Z
-        specHash: ef6d8bf8883dafb37aeb44f3c187f3e3
-        autoCheck: true
-        autoCheckInterval: 5
