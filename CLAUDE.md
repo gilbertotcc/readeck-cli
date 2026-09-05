@@ -53,9 +53,9 @@ wrap.
 ## CLI design guidelines
 
 - `docs/cli-guidelines.md` is the project's checklist for how
-  `readeck-cli` should look and behave, based on the [Command Line
-  Interface Guidelines](https://clig.dev/) (clig.dev). Do not duplicate
-  clig.dev's content elsewhere — link to it instead.
+  `readeck-cli` should look and behave, based on
+  [Command Line Interface Guidelines](https://clig.dev/) (clig.dev). Do
+  not duplicate clig.dev's content elsewhere — link to it instead.
 - Any change that adds or modifies CLI command behavior (a new command, a
   new flag, a changed output format, etc.) must be checked against that
   checklist.
