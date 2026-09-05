@@ -26,5 +26,14 @@ def share_command(bookmark_id: str, *, with_notes: bool, as_json: bool) -> None:
     except CommandError as exc:
         raise click.ClickException(str(exc)) from exc
 
-    record = {"url": share_link.url, "expires": share_link.expires, "title": share_link.title, "id": share_link.id}
-    click.echo(render_records([record], as_json=as_json))
+    if as_json:
+        record = {
+            "url": share_link.url,
+            "expires": share_link.expires,
+            "title": share_link.title,
+            "id": share_link.id,
+        }
+        click.echo(render_records([record], as_json=True))
+        return
+
+    click.echo(f"Link: {share_link.url} (expires: {share_link.expires})")

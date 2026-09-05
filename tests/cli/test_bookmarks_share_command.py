@@ -37,10 +37,7 @@ def test_share_prints_human_readable_output(monkeypatch: pytest.MonkeyPatch) -> 
     result = CliRunner().invoke(main, ["bookmarks", "share", "b1"])
 
     assert result.exit_code == 0
-    assert f"url: {SHARE_LINK.url}" in result.output
-    assert f"expires: {SHARE_LINK.expires}" in result.output
-    assert f"title: {SHARE_LINK.title}" in result.output
-    assert f"id: {SHARE_LINK.id}" in result.output
+    assert result.output == f"Link: {SHARE_LINK.url} (expires: {SHARE_LINK.expires})\n"
 
 
 def test_share_json_output(monkeypatch: pytest.MonkeyPatch) -> None:
