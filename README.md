@@ -47,3 +47,8 @@ This repository is configured for [Claude Code](https://claude.com/claude-code),
 Anthropic's CLI for agentic coding, via the `.claude/` directory. It may pull
 in skills from [Skills](https://www.skills.sh/), a marketplace of skills,
 tracked in `skills-lock.json`.
+
+It also uses the [Context7](https://context7.com/) plugin to fetch
+up-to-date library and framework documentation. Context7 requires a
+`CONTEXT7_API_KEY` environment variable, set in a local `.env` file (not
+committed to version control).
