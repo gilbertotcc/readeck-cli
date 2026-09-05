@@ -1,6 +1,7 @@
 import click
 
 from readeck_cli.cli.bookmarks import bookmarks_group
+from readeck_cli.cli.highlights import highlights_group
 from readeck_cli.cli.info import info_command
 
 
@@ -14,6 +15,7 @@ def main(ctx: click.Context) -> None:
 
 
 main.add_command(bookmarks_group, name="bookmarks")
+main.add_command(highlights_group, name="highlights")
 main.add_command(info_command)
 
 

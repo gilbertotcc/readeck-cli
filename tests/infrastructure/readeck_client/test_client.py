@@ -92,6 +92,32 @@ def test_get_profile_raises_on_401() -> None:
     assert error.response_json() == body
 
 
+def test_get_highlights_returns_parsed_json() -> None:
+    body = [{"id": "abc", "created": "2024-01-01T00:00:00Z", "color": "yellow", "text": "hi", "note": "note"}]
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        assert request.url.path == "/readeck/api/bookmarks/abc123/annotations"
+        return httpx.Response(200, json=body)
+
+    with ReadeckClient.from_config(_config(), transport=httpx.MockTransport(handler)) as client:
+        assert client.get_highlights("abc123") == body
+
+
+def test_get_highlights_raises_on_404() -> None:
+    body = {"status": 404, "message": "not found"}
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        return httpx.Response(404, json=body)
+
+    with (
+        ReadeckClient.from_config(_config(), transport=httpx.MockTransport(handler)) as client,
+        pytest.raises(ReadeckClientError) as exc_info,
+    ):
+        client.get_highlights("unknown")
+
+    assert exc_info.value.status_code == 404
+
+
 def test_request_wraps_transport_error() -> None:
     with (
         ReadeckClient.from_config(_config(), transport=_RaisingTransport()) as client,

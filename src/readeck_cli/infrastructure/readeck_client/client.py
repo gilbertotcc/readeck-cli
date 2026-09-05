@@ -61,6 +61,10 @@ class ReadeckClient:
             self._request("GET", f"/bookmarks/{bookmark_id}/share/link", params=params),
         )
 
+    def get_highlights(self, bookmark_id: str) -> list[dict[str, Any]]:
+        """`GET /bookmarks/{id}/annotations` — a bookmark's highlights."""
+        return cast("list[dict[str, Any]]", self._request("GET", f"/bookmarks/{bookmark_id}/annotations"))
+
     def _request(self, method: str, path: str, *, params: dict[str, Any] | None = None) -> Any:
         try:
             response = self._http.request(method, path, params=params)
