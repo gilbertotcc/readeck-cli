@@ -1,14 +1,26 @@
-from typing import TYPE_CHECKING
+from importlib.metadata import version
+
+from click.testing import CliRunner
 
 from readeck_cli import main
 
 
-if TYPE_CHECKING:
-    import pytest
+def test_version_flag_prints_package_version() -> None:
+    result = CliRunner().invoke(main, ["--version"])
+
+    assert result.exit_code == 0
+    assert version("readeck-cli") in result.output
 
 
-def test_main_prints_greeting(capsys: pytest.CaptureFixture[str]) -> None:
-    main()
+def test_no_args_prints_usage() -> None:
+    result = CliRunner().invoke(main, [])
 
-    captured = capsys.readouterr()
-    assert captured.out == "Hello from readeck-cli!\n"
+    assert result.exit_code == 0
+    assert "Usage:" in result.output
+
+
+def test_h_flag_is_a_help_alias() -> None:
+    result = CliRunner().invoke(main, ["-h"])
+
+    assert result.exit_code == 0
+    assert "Usage:" in result.output

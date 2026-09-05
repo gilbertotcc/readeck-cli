@@ -1,2 +1,4 @@
-def main() -> None:
-    print("Hello from readeck-cli!")
+from readeck_cli.cli import main
+
+
+__all__ = ["main"]

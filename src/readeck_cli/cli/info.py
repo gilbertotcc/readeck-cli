@@ -1,0 +1,32 @@
+import json
+
+import click
+
+from readeck_cli.commands import CommandError, get_instance_info
+from readeck_cli.config import load_credentials
+
+
+@click.command(name="info")
+@click.option("--json", "as_json", is_flag=True, help="Print raw JSON output.")
+def info_command(*, as_json: bool) -> None:
+    """Show information about the Readeck instance."""
+    credentials = load_credentials()
+
+    try:
+        instance_info = get_instance_info(credentials)
+    except CommandError as exc:
+        raise click.ClickException(str(exc)) from exc
+
+    kind = "nightly" if instance_info.is_nightly else "stable"
+
+    if as_json:
+        payload = {
+            "version": instance_info.canonical,
+            "kind": kind,
+            "features": list(instance_info.features),
+        }
+        click.echo(json.dumps(payload, indent=2))
+        return
+
+    click.echo(f"Readeck {instance_info.canonical} ({kind})")
+    click.echo(f"Features: {', '.join(instance_info.features) or 'none'}")

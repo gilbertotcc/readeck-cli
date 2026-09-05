@@ -32,6 +32,25 @@ Run the CLI with:
 uv run readeck-cli
 ```
 
+### Configuration
+
+Commands that talk to the Readeck API read the following environment
+variables:
+
+- `READECK_BASE_URL` — the Readeck API base URL (e.g.
+  `http://<HOST>/readeck/api`).
+- `READECK_BEARER_TOKEN` — a Readeck API token, sent as a `Bearer` token.
+
+```shell
+export READECK_BASE_URL="http://<HOST>/readeck/api"
+export READECK_BEARER_TOKEN="<TOKEN>"
+```
+
+### Commands
+
+- `readeck-cli info` — show the Readeck instance's version and enabled
+  features.
+
 Run the checks locally:
 
 ```shell
