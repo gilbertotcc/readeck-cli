@@ -1,5 +1,6 @@
 import click
 
+from readeck_cli.cli.bookmarks import bookmarks_group
 from readeck_cli.cli.info import info_command
 
 
@@ -12,6 +13,7 @@ def main(ctx: click.Context) -> None:
         click.echo(ctx.get_help())
 
 
+main.add_command(bookmarks_group, name="bookmarks")
 main.add_command(info_command)
 
 
