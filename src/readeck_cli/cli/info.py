@@ -17,16 +17,16 @@ def info_command(*, as_json: bool) -> None:
     except CommandError as exc:
         raise click.ClickException(str(exc)) from exc
 
+    kind = f"nightly" if instance_info.is_nightly else "stable"
+
     if as_json:
         payload = {
-            "release": instance_info.release,
-            "canonical": instance_info.canonical,
-            "build": instance_info.build,
+            "version": instance_info.canonical,
+            "kind": kind,
             "features": list(instance_info.features),
         }
         click.echo(json.dumps(payload, indent=2))
         return
 
-    kind = f"nightly build {instance_info.build}" if instance_info.is_nightly else "stable"
     click.echo(f"Readeck {instance_info.canonical} ({kind})")
     click.echo(f"Features: {', '.join(instance_info.features) or 'none'}")

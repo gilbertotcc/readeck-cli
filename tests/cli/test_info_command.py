@@ -47,7 +47,7 @@ def test_info_prints_nightly_build_label(monkeypatch: pytest.MonkeyPatch) -> Non
     result = CliRunner().invoke(main, ["info"])
 
     assert result.exit_code == 0
-    assert "nightly build 175-g154ad5c1" in result.output
+    assert "175-g154ad5c1 (nightly)" in result.output
     assert "Features: none" in result.output
 
 
@@ -60,9 +60,8 @@ def test_info_json_output(monkeypatch: pytest.MonkeyPatch) -> None:
 
     assert result.exit_code == 0
     assert json.loads(result.output) == {
-        "release": "0.23.2",
-        "canonical": "0.23.2",
-        "build": "",
+        "version": "0.23.2",
+        "kind": "stable",
         "features": ["email"],
     }
 
