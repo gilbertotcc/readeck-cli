@@ -1,8 +1,14 @@
+from typing import TYPE_CHECKING
+
 import click
 
 from readeck_cli.cli.output import render_records
 from readeck_cli.commands import CommandError, get_bookmark, get_share_link
 from readeck_cli.config import load_credentials
+
+
+if TYPE_CHECKING:
+    from readeck_cli.commands import BookmarkDetails
 
 
 @click.group(invoke_without_command=True)
@@ -51,17 +57,44 @@ def bookmarks_get_command(bookmark_id: str, *, as_json: bool) -> None:
     except CommandError as exc:
         raise click.ClickException(str(exc)) from exc
 
-    record = {
-        "id": bookmark.id,
-        "href": bookmark.href,
-        "url": bookmark.url,
-        "title": bookmark.title,
-        "site": bookmark.site,
-        "authors": list(bookmark.authors),
-        "description": bookmark.description,
-        "note": bookmark.note,
-        "labels": list(bookmark.labels),
-        "links": [{"title": link.title, "url": link.url} for link in bookmark.links],
-    }
+    if as_json:
+        record = {
+            "id": bookmark.id,
+            "href": bookmark.href,
+            "url": bookmark.url,
+            "title": bookmark.title,
+            "site": bookmark.site,
+            "authors": list(bookmark.authors),
+            "description": bookmark.description,
+            "note": bookmark.note,
+            "labels": list(bookmark.labels),
+            "links": [{"title": link.title, "url": link.url} for link in bookmark.links],
+        }
+        click.echo(render_records([record], as_json=True))
+        return
 
-    click.echo(render_records([record], as_json=as_json))
+    click.echo(_format_bookmark(bookmark))
+
+
+def _format_bookmark(bookmark: BookmarkDetails) -> str:
+    """Render a bookmark's details as a labeled block, with links as a sub-list."""
+    fields = [
+        ("ID", bookmark.id),
+        ("URL", bookmark.url),
+        ("Site", bookmark.site),
+        ("Authors", ", ".join(bookmark.authors) or "none"),
+        ("Labels", ", ".join(bookmark.labels) or "none"),
+        ("Description", bookmark.description),
+        ("Note", bookmark.note),
+    ]
+    width = max(len(label) + 1 for label, _ in fields)
+
+    lines = [bookmark.title or bookmark.id]
+    lines.extend(f"  {(label + ':').ljust(width)} {value}" for label, value in fields)
+
+    if bookmark.links:
+        lines.append("")
+        lines.append("  Links:")
+        lines.extend(f"    - {link.title}: {link.url}" for link in bookmark.links)
+
+    return "\n".join(lines)

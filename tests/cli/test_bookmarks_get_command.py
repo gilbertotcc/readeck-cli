@@ -69,10 +69,43 @@ def test_bookmarks_get_prints_human_readable_record(monkeypatch: pytest.MonkeyPa
     result = CliRunner().invoke(main, ["bookmarks", "get", "abc123"])
 
     assert result.exit_code == 0
-    assert "id: abc123" in result.output
-    assert "title: Example" in result.output
-    assert "Related" in result.output
-    assert "https://example.test/related" in result.output
+    assert result.output == (
+        "Example\n"
+        "  ID:          abc123\n"
+        "  URL:         https://example.test/article\n"
+        "  Site:        example.test\n"
+        "  Authors:     Jane Doe\n"
+        "  Labels:      reading\n"
+        "  Description: A short description\n"
+        "  Note:        My note\n"
+        "\n"
+        "  Links:\n"
+        "    - Related: https://example.test/related\n"
+    )
+
+
+def test_bookmarks_get_human_output_omits_links_section_when_empty(monkeypatch: pytest.MonkeyPatch) -> None:
+    _set_env(monkeypatch)
+    bookmark = BookmarkDetails(
+        id="xyz",
+        href="",
+        url="https://x.test",
+        title="No Extras",
+        site="x.test",
+        authors=(),
+        description="desc",
+        note="",
+        labels=(),
+        links=(),
+    )
+    monkeypatch.setattr("readeck_cli.cli.bookmarks.get_bookmark", lambda *_args, **_kwargs: bookmark)
+
+    result = CliRunner().invoke(main, ["bookmarks", "get", "xyz"])
+
+    assert result.exit_code == 0
+    assert "Links:" not in result.output
+    assert "Authors:     none" in result.output
+    assert "Labels:      none" in result.output
 
 
 def test_bookmarks_get_json_output(monkeypatch: pytest.MonkeyPatch) -> None:
