@@ -30,7 +30,7 @@ def test_info_requires_credentials(monkeypatch: pytest.MonkeyPatch) -> None:
 def test_info_prints_human_readable_summary(monkeypatch: pytest.MonkeyPatch) -> None:
     _set_env(monkeypatch)
     info = InstanceInfo(release="0.23.2", canonical="0.23.2", build="", features=("email", "oauth"))
-    monkeypatch.setattr("readeck_cli.cli.info.get_instance_info", lambda **_kwargs: info)
+    monkeypatch.setattr("readeck_cli.cli.info.get_instance_info", lambda *_args, **_kwargs: info)
 
     result = CliRunner().invoke(main, ["info"])
 
@@ -42,19 +42,19 @@ def test_info_prints_human_readable_summary(monkeypatch: pytest.MonkeyPatch) -> 
 def test_info_prints_nightly_build_label(monkeypatch: pytest.MonkeyPatch) -> None:
     _set_env(monkeypatch)
     info = InstanceInfo(release="0.24.0", canonical="0.24.0-175-g154ad5c1", build="175-g154ad5c1", features=())
-    monkeypatch.setattr("readeck_cli.cli.info.get_instance_info", lambda **_kwargs: info)
+    monkeypatch.setattr("readeck_cli.cli.info.get_instance_info", lambda *_args, **_kwargs: info)
 
     result = CliRunner().invoke(main, ["info"])
 
     assert result.exit_code == 0
-    assert "175-g154ad5c1 (nightly)" in result.output
+    assert "Readeck 0.24.0-175-g154ad5c1 (nightly)" in result.output
     assert "Features: none" in result.output
 
 
 def test_info_json_output(monkeypatch: pytest.MonkeyPatch) -> None:
     _set_env(monkeypatch)
     info = InstanceInfo(release="0.23.2", canonical="0.23.2", build="", features=("email",))
-    monkeypatch.setattr("readeck_cli.cli.info.get_instance_info", lambda **_kwargs: info)
+    monkeypatch.setattr("readeck_cli.cli.info.get_instance_info", lambda *_args, **_kwargs: info)
 
     result = CliRunner().invoke(main, ["info", "--json"])
 
@@ -69,7 +69,7 @@ def test_info_json_output(monkeypatch: pytest.MonkeyPatch) -> None:
 def test_info_reports_command_errors(monkeypatch: pytest.MonkeyPatch) -> None:
     _set_env(monkeypatch)
 
-    def raise_error(**_kwargs: object) -> InstanceInfo:
+    def raise_error(*_args: object, **_kwargs: object) -> InstanceInfo:
         raise CommandError("boom")
 
     monkeypatch.setattr("readeck_cli.cli.info.get_instance_info", raise_error)

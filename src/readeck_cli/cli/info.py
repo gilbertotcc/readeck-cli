@@ -9,15 +9,15 @@ from readeck_cli.config import load_credentials
 @click.command(name="info")
 @click.option("--json", "as_json", is_flag=True, help="Print raw JSON output.")
 def info_command(*, as_json: bool) -> None:
-    """Show information about the configured Readeck instance."""
+    """Show information about the Readeck instance."""
     credentials = load_credentials()
 
     try:
-        instance_info = get_instance_info(base_url=credentials.base_url, api_token=credentials.api_token)
+        instance_info = get_instance_info(credentials)
     except CommandError as exc:
         raise click.ClickException(str(exc)) from exc
 
-    kind = f"nightly" if instance_info.is_nightly else "stable"
+    kind = "nightly" if instance_info.is_nightly else "stable"
 
     if as_json:
         payload = {

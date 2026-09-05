@@ -8,10 +8,12 @@ from readeck_cli.infrastructure.readeck_client import ReadeckClient, ReadeckClie
 if TYPE_CHECKING:
     import httpx
 
+    from readeck_cli.config import ReadeckCredentials
+
 
 @dataclass(frozen=True, slots=True)
 class InstanceInfo:
-    """Public information about a Readeck instance, as returned by `GET /info`."""
+    """Public information about a Readeck instance."""
 
     release: str
     canonical: str
@@ -24,14 +26,13 @@ class InstanceInfo:
 
 
 def get_instance_info(
+    credentials: ReadeckCredentials,
     *,
-    base_url: str,
-    api_token: str,
     transport: httpx.BaseTransport | None = None,
 ) -> InstanceInfo:
     """Fetch and parse public information about a Readeck instance."""
     try:
-        config = ReadeckClientConfig.from_params(base_url=base_url, api_token=api_token)
+        config = ReadeckClientConfig.from_params(base_url=credentials.base_url, api_token=credentials.api_token)
     except ValueError as exc:
         raise CommandError(str(exc)) from exc
 
