@@ -39,6 +39,42 @@ def test_get_profile_sends_bearer_token_and_returns_json() -> None:
         assert client.get_profile() == body
 
 
+def test_get_share_link_returns_parsed_json_without_with_notes_param() -> None:
+    body = {"url": "https://example.test/share/abc", "expires": "2026-01-01T00:00:00Z", "title": "Title", "id": "b1"}
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        assert request.url.path == "/readeck/api/bookmarks/b1/share/link"
+        assert "with_notes" not in request.url.params
+        return httpx.Response(200, json=body)
+
+    with ReadeckClient.from_config(_config(), transport=httpx.MockTransport(handler)) as client:
+        assert client.get_share_link("b1") == body
+
+
+def test_get_share_link_sends_with_notes_query_param() -> None:
+    body = {"url": "https://example.test/share/abc", "expires": "", "title": "", "id": "b1"}
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        assert request.url.params["with_notes"] == "true"
+        return httpx.Response(200, json=body)
+
+    with ReadeckClient.from_config(_config(), transport=httpx.MockTransport(handler)) as client:
+        assert client.get_share_link("b1", with_notes=True) == body
+
+
+def test_get_share_link_raises_on_error_status() -> None:
+    def handler(request: httpx.Request) -> httpx.Response:
+        return httpx.Response(404, json={"status": 404, "message": "not found"})
+
+    with (
+        ReadeckClient.from_config(_config(), transport=httpx.MockTransport(handler)) as client,
+        pytest.raises(ReadeckClientError) as exc_info,
+    ):
+        client.get_share_link("missing")
+
+    assert exc_info.value.status_code == 404
+
+
 def test_get_profile_raises_on_401() -> None:
     body = {"status": 401, "message": "invalid token"}
 
