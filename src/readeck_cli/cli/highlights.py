@@ -5,6 +5,16 @@ from readeck_cli.commands import CommandError, get_highlights
 from readeck_cli.config import load_credentials
 
 
+def _render_highlight(record: dict[str, str]) -> str:
+    return (
+        f"Highlight {record['id']}\n"
+        f"Created: {record['created']}\n"
+        f"Color: {record['color']}\n"
+        f"Text: {record['text']}\n"
+        f"Note: {record['note']}"
+    )
+
+
 @click.group(invoke_without_command=True)
 @click.pass_context
 def highlights_group(ctx: click.Context) -> None:
@@ -35,7 +45,12 @@ def get_command(bookmark_id: str, *, as_json: bool) -> None:
         }
         for highlight in highlights
     ]
-    click.echo(render_records(records, as_json=as_json))
+
+    if as_json:
+        click.echo(render_records(records, as_json=True))
+        return
+
+    click.echo("\n\n".join(_render_highlight(record) for record in records))
 
 
 highlights_group.add_command(get_command)

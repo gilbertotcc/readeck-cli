@@ -28,13 +28,7 @@ def get_highlights(
     *,
     transport: httpx.BaseTransport | None = None,
 ) -> tuple[Highlight, ...]:
-    """Fetch and parse a bookmark's highlights (annotations).
-
-    Fields are read defensively: the project's local OpenAPI copy only
-    documents `id`, `created`, `text`, but the live Readeck API also
-    returns `color` and `note`. A server that omits a field degrades to a
-    blank value here instead of raising.
-    """
+    """Fetch and parse a bookmark's highlights (annotations)."""
     try:
         config = ReadeckClientConfig.from_params(base_url=credentials.base_url, api_token=credentials.api_token)
     except ValueError as exc:

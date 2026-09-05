@@ -35,11 +35,11 @@ def test_highlights_get_prints_human_readable_summary(monkeypatch: pytest.Monkey
     result = CliRunner().invoke(main, ["highlights", "get", "abc"])
 
     assert result.exit_code == 0
-    assert "id: h1" in result.output
-    assert "created: 2024-01-01" in result.output
-    assert "color: yellow" in result.output
-    assert "text: hi" in result.output
-    assert "note: a note" in result.output
+    assert "Highlight h1" in result.output
+    assert "Created: 2024-01-01" in result.output
+    assert "Color: yellow" in result.output
+    assert "Text: hi" in result.output
+    assert "Note: a note" in result.output
 
 
 def test_highlights_get_json_output(monkeypatch: pytest.MonkeyPatch) -> None:
