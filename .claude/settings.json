@@ -1,5 +1,6 @@
 {
   "enabledPlugins": {
-    "markdown-editor@gilbertotcc-claude-plugins": true
+    "markdown-editor@gilbertotcc-claude-plugins": true,
+    "context7@claude-plugins-official": true
   }
 }
