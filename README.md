@@ -41,6 +41,13 @@ uv run mypy src tests
 uv run pytest
 ```
 
+### CLI design guidelines
+
+`readeck-cli` is designed to follow the
+[Command Line Interface Guidelines](https://clig.dev/). See
+[`docs/cli-guidelines.md`](docs/cli-guidelines.md) for the
+project-specific checklist derived from them.
+
 ## Claude Code
 
 This repository is configured for [Claude Code](https://claude.com/claude-code),

@@ -50,6 +50,18 @@ wrap.
   spec changes — resync via Bruno's OpenAPI sync (`bruno.openapi` config in
   `opencollection.yml`) instead, then review the diff.
 
+## CLI design guidelines
+
+- `docs/cli-guidelines.md` is the project's checklist for how
+  `readeck-cli` should look and behave, based on the [Command Line
+  Interface Guidelines](https://clig.dev/) (clig.dev). Do not duplicate
+  clig.dev's content elsewhere — link to it instead.
+- Any change that adds or modifies CLI command behavior (a new command, a
+  new flag, a changed output format, etc.) must be checked against that
+  checklist.
+- Before finishing such a change, or when reviewing one (including during
+  `/code-review`), proactively run the `clig-check` skill.
+
 ## Readeck API basics
 
 - Base API endpoint: `http://<HOST>/readeck/api`.
