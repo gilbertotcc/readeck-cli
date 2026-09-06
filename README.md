@@ -71,9 +71,10 @@ uv run pytest
 ### CLI output fixtures
 
 Full, human-readable CLI output (e.g. a bookmark's rendered details) is
-tested with [pytest-regressions][pytest-regressions]'s `file_regression`
-fixture: each tested output scenario gets its own `.txt` file next to its
-test module, e.g.
+tested with
+[pytest-regressions](https://pytest-regressions.readthedocs.io/en/latest/)'s
+`file_regression` fixture: each tested output scenario gets its own `.txt`
+file next to its test module, e.g.
 `tests/cli/test_bookmarks_get_command/test_bookmarks_get_prints_human_readable_record.txt`.
 
 To update a fixture, either hand-edit the `.txt` file first as the
@@ -87,8 +88,6 @@ uv run pytest --force-regen
 Review the diff before committing either way. See `CLAUDE.md` for the
 full convention (fixture naming, which tests use this vs. a plain
 assertion, and when not to use `--force-regen`).
-
-[pytest-regressions]: https://pytest-regressions.readthedocs.io/en/latest/
 
 ### CLI design guidelines
 

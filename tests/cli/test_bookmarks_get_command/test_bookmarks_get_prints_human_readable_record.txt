@@ -9,4 +9,4 @@ Example
 
   Links:
     - Related: https://example.test/related
-    - Further reading: https://example.test/further
+    - https://example.test/further

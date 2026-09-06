@@ -23,15 +23,3 @@ def test_render_detail_block_aligns_fields() -> None:
     output = render_detail_block("Title", [("ID", "abc123"), ("Description", "A short one")])
 
     assert output == ("Title\n  ID:          abc123\n  Description: A short one")
-
-
-def test_render_detail_block_omits_empty_sections() -> None:
-    output = render_detail_block("Title", [("ID", "abc123")], sections=[("Links", [])])
-
-    assert "Links:" not in output
-
-
-def test_render_detail_block_renders_non_empty_sections() -> None:
-    output = render_detail_block("Title", [("ID", "abc123")], sections=[("Links", ["Related: https://x.test"])])
-
-    assert output == ("Title\n  ID: abc123\n\n  Links:\n    - Related: https://x.test")

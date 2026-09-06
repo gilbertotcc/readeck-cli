@@ -8,7 +8,7 @@ from readeck_cli.config import load_credentials
 
 
 if TYPE_CHECKING:
-    from readeck_cli.commands import Bookmark, BookmarkDetails, PaginationInfo
+    from readeck_cli.commands import Bookmark, BookmarkDetails, BookmarkLink, PaginationInfo
 
 
 @click.group(invoke_without_command=True)
@@ -91,8 +91,17 @@ def _bookmark_fields(bookmark: Bookmark | BookmarkDetails) -> list[tuple[str, st
 
 def _format_bookmark(bookmark: BookmarkDetails) -> str:
     """Render a bookmark's details as a labeled block, with links as a sub-list."""
-    links = [f"{link.title}: {link.url}" for link in bookmark.links]
-    return render_detail_block(bookmark.title or bookmark.id, _bookmark_fields(bookmark), sections=[("Links", links)])
+    block = render_detail_block(bookmark.title or bookmark.id, _bookmark_fields(bookmark))
+    if not bookmark.links:
+        return block
+
+    lines = [block, "", "  Links:"]
+    lines.extend(f"    - {_format_link(link)}" for link in bookmark.links)
+    return "\n".join(lines)
+
+
+def _format_link(link: BookmarkLink) -> str:
+    return f"{link.title}: {link.url}" if link.title else link.url
 
 
 @bookmarks_group.command(name="list")
@@ -142,4 +151,4 @@ def _echo_pagination_summary(bookmarks: list[Bookmark], pagination_info: Paginat
     if pagination_info.total_pages <= 1:
         return
     summary = f"{len(bookmarks)} of {pagination_info.total_count} across {pagination_info.total_pages} page(s)"
-    click.echo(summary, err=True)
+    click.echo(f"\n{summary}", err=True)

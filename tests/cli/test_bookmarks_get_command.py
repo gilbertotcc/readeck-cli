@@ -25,7 +25,7 @@ BOOKMARK = BookmarkDetails(
     labels=("reading", "tech"),
     links=(
         BookmarkLink(title="Related", url="https://example.test/related"),
-        BookmarkLink(title="Further reading", url="https://example.test/further"),
+        BookmarkLink(title="", url="https://example.test/further"),
     ),
 )
 
@@ -41,7 +41,7 @@ EXPECTED_RECORD = {
     "labels": ["reading", "tech"],
     "links": [
         {"title": "Related", "url": "https://example.test/related"},
-        {"title": "Further reading", "url": "https://example.test/further"},
+        {"title": "", "url": "https://example.test/further"},
     ],
 }
 

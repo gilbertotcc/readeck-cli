@@ -64,8 +64,9 @@ application logic in `commands/`, and any new HTTP calls in
 
 ## CLI output regression fixtures
 
-Full, multi-line human-readable CLI output (a "get"-style command's rendered
-record, a "list" command's rendered items) is tested with
+Full human-readable CLI output — a "get"-style command's rendered record, a
+"list" command's rendered items, or a single-line summary like `bookmarks
+share`'s — is tested with
 [pytest-regressions](https://pytest-regressions.readthedocs.io/en/latest/)'
 `file_regression` fixture instead of an inline expected string, so each
 tested output scenario lives in its own reviewable `.txt` file (see
