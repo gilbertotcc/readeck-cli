@@ -70,10 +70,16 @@ def test_list_prints_human_readable_records(monkeypatch: pytest.MonkeyPatch) -> 
     result = CliRunner().invoke(main, ["bookmarks", "list"])
 
     assert result.exit_code == 0
-    assert "id: abc123" in result.stdout
-    assert "title: An article" in result.stdout
-    assert "authors: Alice, Bob" in result.stdout
-    assert "labels: tech, reading" in result.stdout
+    assert result.stdout == (
+        "An article\n"
+        "  ID:          abc123\n"
+        "  URL:         https://example.test/article\n"
+        "  Site:        example.test\n"
+        "  Authors:     Alice, Bob\n"
+        "  Labels:      tech, reading\n"
+        "  Description: A description.\n"
+        "  Note:        A note.\n"
+    )
 
 
 def test_list_json_output(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -108,7 +114,7 @@ def test_list_empty_result_human(monkeypatch: pytest.MonkeyPatch) -> None:
     result = CliRunner().invoke(main, ["bookmarks", "list"])
 
     assert result.exit_code == 0
-    assert result.stdout == ""
+    assert result.stdout == "No bookmarks found.\n"
 
 
 def test_list_empty_result_json(monkeypatch: pytest.MonkeyPatch) -> None:

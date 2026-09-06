@@ -35,11 +35,9 @@ def test_highlights_get_prints_human_readable_summary(monkeypatch: pytest.Monkey
     result = CliRunner().invoke(main, ["highlights", "get", "abc"])
 
     assert result.exit_code == 0
-    assert "Highlight h1" in result.output
-    assert "Created: 2024-01-01" in result.output
-    assert "Color: yellow" in result.output
-    assert "Text: hi" in result.output
-    assert "Note: a note" in result.output
+    assert result.output == (
+        "Highlight h1\n  Created: 2024-01-01\n  Color:   yellow\n  Text:    hi\n  Note:    a note\n"
+    )
 
 
 def test_highlights_get_json_output(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -62,7 +60,7 @@ def test_highlights_get_empty_result_is_not_an_error(monkeypatch: pytest.MonkeyP
     result = CliRunner().invoke(main, ["highlights", "get", "abc"])
 
     assert result.exit_code == 0
-    assert result.output.strip() == ""
+    assert result.output == "No highlights found.\n"
 
 
 def test_highlights_get_empty_result_json(monkeypatch: pytest.MonkeyPatch) -> None:

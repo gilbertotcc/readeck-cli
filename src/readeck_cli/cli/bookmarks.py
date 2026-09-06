@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 
 import click
 
-from readeck_cli.cli.output import render_records
+from readeck_cli.cli.output import render_detail_block, render_json
 from readeck_cli.commands import CommandError, get_bookmark, get_share_link, list_bookmarks
 from readeck_cli.config import load_credentials
 
@@ -39,7 +39,7 @@ def share_command(bookmark_id: str, *, with_notes: bool, as_json: bool) -> None:
             "title": share_link.title,
             "id": share_link.id,
         }
-        click.echo(render_records([record], as_json=True))
+        click.echo(render_json([record]))
         return
 
     click.echo(f"Link: {share_link.url} (expires: {share_link.expires})")
@@ -70,15 +70,15 @@ def bookmarks_get_command(bookmark_id: str, *, as_json: bool) -> None:
             "labels": list(bookmark.labels),
             "links": [{"title": link.title, "url": link.url} for link in bookmark.links],
         }
-        click.echo(render_records([record], as_json=True))
+        click.echo(render_json([record]))
         return
 
     click.echo(_format_bookmark(bookmark))
 
 
-def _format_bookmark(bookmark: BookmarkDetails) -> str:
-    """Render a bookmark's details as a labeled block, with links as a sub-list."""
-    fields = [
+def _bookmark_fields(bookmark: Bookmark | BookmarkDetails) -> list[tuple[str, str]]:
+    """Fields shared by "list" and "get" style bookmark records, so both look consistent."""
+    return [
         ("ID", bookmark.id),
         ("URL", bookmark.url),
         ("Site", bookmark.site),
@@ -87,17 +87,12 @@ def _format_bookmark(bookmark: BookmarkDetails) -> str:
         ("Description", bookmark.description),
         ("Note", bookmark.note),
     ]
-    width = max(len(label) + 1 for label, _ in fields)
 
-    lines = [bookmark.title or bookmark.id]
-    lines.extend(f"  {(label + ':').ljust(width)} {value}" for label, value in fields)
 
-    if bookmark.links:
-        lines.append("")
-        lines.append("  Links:")
-        lines.extend(f"    - {link.title}: {link.url}" for link in bookmark.links)
-
-    return "\n".join(lines)
+def _format_bookmark(bookmark: BookmarkDetails) -> str:
+    """Render a bookmark's details as a labeled block, with links as a sub-list."""
+    links = [f"{link.title}: {link.url}" for link in bookmark.links]
+    return render_detail_block(bookmark.title or bookmark.id, _bookmark_fields(bookmark), sections=[("Links", links)])
 
 
 @bookmarks_group.command(name="list")
@@ -114,25 +109,32 @@ def list_command(*, search: str | None, limit: int | None, offset: int | None, a
     except CommandError as exc:
         raise click.ClickException(str(exc)) from exc
 
-    records = [_to_record(bookmark, as_json=as_json) for bookmark in bookmarks]
-    output = render_records(records, as_json=as_json)
-    if output:
-        click.echo(output)
+    if as_json:
+        click.echo(render_json([_to_record(bookmark) for bookmark in bookmarks]))
+    elif bookmarks:
+        click.echo("\n\n".join(_format_bookmark_summary(bookmark) for bookmark in bookmarks))
+    else:
+        click.echo("No bookmarks found.")
 
     _echo_pagination_summary(bookmarks, pagination_info)
 
 
-def _to_record(bookmark: Bookmark, *, as_json: bool) -> dict[str, object]:
+def _format_bookmark_summary(bookmark: Bookmark) -> str:
+    """Render one bookmark from a list, in the same style as "bookmarks get"."""
+    return render_detail_block(bookmark.title or bookmark.id, _bookmark_fields(bookmark))
+
+
+def _to_record(bookmark: Bookmark) -> dict[str, object]:
     return {
         "id": bookmark.id,
         "href": bookmark.href,
         "url": bookmark.url,
         "title": bookmark.title,
         "site": bookmark.site,
-        "authors": list(bookmark.authors) if as_json else ", ".join(bookmark.authors),
+        "authors": list(bookmark.authors),
         "description": bookmark.description,
         "note": bookmark.note,
-        "labels": list(bookmark.labels) if as_json else ", ".join(bookmark.labels),
+        "labels": list(bookmark.labels),
     }
 
 
