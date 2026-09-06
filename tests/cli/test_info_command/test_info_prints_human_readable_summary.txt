@@ -1,0 +1,2 @@
+Readeck 0.23.2 (stable)
+Features: email, oauth

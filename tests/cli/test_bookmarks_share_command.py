@@ -10,6 +10,7 @@ from readeck_cli.config import BASE_URL_ENV_VAR, TOKEN_ENV_VAR
 
 if TYPE_CHECKING:
     import pytest
+    from pytest_regressions.file_regression import FileRegressionFixture
 
 
 def _set_env(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -30,14 +31,16 @@ def test_share_requires_credentials(monkeypatch: pytest.MonkeyPatch) -> None:
     assert BASE_URL_ENV_VAR in result.output
 
 
-def test_share_prints_human_readable_output(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_share_prints_human_readable_output(
+    monkeypatch: pytest.MonkeyPatch, file_regression: FileRegressionFixture
+) -> None:
     _set_env(monkeypatch)
     monkeypatch.setattr("readeck_cli.cli.bookmarks.get_share_link", lambda *_args, **_kwargs: SHARE_LINK)
 
     result = CliRunner().invoke(main, ["bookmarks", "share", "b1"])
 
     assert result.exit_code == 0
-    assert result.output == f"Link: {SHARE_LINK.url} (expires: {SHARE_LINK.expires})\n"
+    file_regression.check(result.output, extension=".txt")
 
 
 def test_share_json_output(monkeypatch: pytest.MonkeyPatch) -> None:

@@ -1,0 +1,12 @@
+Example
+  ID:          abc123
+  URL:         https://example.test/article
+  Site:        example.test
+  Authors:     Jane Doe, John Smith
+  Labels:      reading, tech
+  Description: A short description
+  Note:        My note
+
+  Links:
+    - Related: https://example.test/related
+    - Further reading: https://example.test/further

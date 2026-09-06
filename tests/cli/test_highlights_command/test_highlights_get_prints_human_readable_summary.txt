@@ -1,0 +1,11 @@
+Highlight h1
+  Created: 2024-01-01
+  Color:   yellow
+  Text:    hi
+  Note:    a note
+
+Highlight h2
+  Created: 2024-01-02
+  Color:   green
+  Text:    bye
+  Note:    

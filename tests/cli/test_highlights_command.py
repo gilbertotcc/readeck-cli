@@ -10,6 +10,7 @@ from readeck_cli.config import BASE_URL_ENV_VAR, TOKEN_ENV_VAR
 
 if TYPE_CHECKING:
     import pytest
+    from pytest_regressions.file_regression import FileRegressionFixture
 
 
 def _set_env(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -27,17 +28,20 @@ def test_highlights_get_requires_credentials(monkeypatch: pytest.MonkeyPatch) ->
     assert BASE_URL_ENV_VAR in result.output
 
 
-def test_highlights_get_prints_human_readable_summary(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_highlights_get_prints_human_readable_summary(
+    monkeypatch: pytest.MonkeyPatch, file_regression: FileRegressionFixture
+) -> None:
     _set_env(monkeypatch)
-    highlights = (Highlight(id="h1", created="2024-01-01", color="yellow", text="hi", note="a note"),)
+    highlights = (
+        Highlight(id="h1", created="2024-01-01", color="yellow", text="hi", note="a note"),
+        Highlight(id="h2", created="2024-01-02", color="green", text="bye", note=""),
+    )
     monkeypatch.setattr("readeck_cli.cli.highlights.get_highlights", lambda *_args, **_kwargs: highlights)
 
     result = CliRunner().invoke(main, ["highlights", "get", "abc"])
 
     assert result.exit_code == 0
-    assert result.output == (
-        "Highlight h1\n  Created: 2024-01-01\n  Color:   yellow\n  Text:    hi\n  Note:    a note\n"
-    )
+    file_regression.check(result.output, extension=".txt")
 
 
 def test_highlights_get_json_output(monkeypatch: pytest.MonkeyPatch) -> None:

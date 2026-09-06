@@ -10,6 +10,7 @@ from readeck_cli.config import BASE_URL_ENV_VAR, TOKEN_ENV_VAR
 
 if TYPE_CHECKING:
     import pytest
+    from pytest_regressions.file_regression import FileRegressionFixture
 
 
 def _set_env(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -27,7 +28,9 @@ def test_info_requires_credentials(monkeypatch: pytest.MonkeyPatch) -> None:
     assert BASE_URL_ENV_VAR in result.output
 
 
-def test_info_prints_human_readable_summary(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_info_prints_human_readable_summary(
+    monkeypatch: pytest.MonkeyPatch, file_regression: FileRegressionFixture
+) -> None:
     _set_env(monkeypatch)
     info = InstanceInfo(release="0.23.2", canonical="0.23.2", build="", features=("email", "oauth"))
     monkeypatch.setattr("readeck_cli.cli.info.get_instance_info", lambda *_args, **_kwargs: info)
@@ -35,11 +38,12 @@ def test_info_prints_human_readable_summary(monkeypatch: pytest.MonkeyPatch) -> 
     result = CliRunner().invoke(main, ["info"])
 
     assert result.exit_code == 0
-    assert "Readeck 0.23.2 (stable)" in result.output
-    assert "Features: email, oauth" in result.output
+    file_regression.check(result.output, extension=".txt")
 
 
-def test_info_prints_nightly_build_label(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_info_prints_nightly_build_label(
+    monkeypatch: pytest.MonkeyPatch, file_regression: FileRegressionFixture
+) -> None:
     _set_env(monkeypatch)
     info = InstanceInfo(release="0.24.0", canonical="0.24.0-175-g154ad5c1", build="175-g154ad5c1", features=())
     monkeypatch.setattr("readeck_cli.cli.info.get_instance_info", lambda *_args, **_kwargs: info)
@@ -47,8 +51,7 @@ def test_info_prints_nightly_build_label(monkeypatch: pytest.MonkeyPatch) -> Non
     result = CliRunner().invoke(main, ["info"])
 
     assert result.exit_code == 0
-    assert "Readeck 0.24.0-175-g154ad5c1 (nightly)" in result.output
-    assert "Features: none" in result.output
+    file_regression.check(result.output, extension=".txt")
 
 
 def test_info_json_output(monkeypatch: pytest.MonkeyPatch) -> None:
