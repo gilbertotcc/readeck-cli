@@ -48,10 +48,16 @@ export READECK_BEARER_TOKEN="<TOKEN>"
 
 ### Commands
 
-- `readeck-cli info` — show the Readeck instance's version and enabled
-  features.
+- `readeck-cli bookmarks list [SEARCH]` — list bookmarks, optionally
+  filtered by search.
+- `readeck-cli bookmarks get <BOOKMARK_ID>` — show a single bookmark's
+  full details.
+- `readeck-cli bookmarks share <BOOKMARK_ID>` — create a public share
+  link for a bookmark.
 - `readeck-cli highlights get <BOOKMARK_ID>` — list a bookmark's
   highlights.
+- `readeck-cli info` — show the Readeck instance's version and enabled
+  features.
 
 Run the checks locally:
 
