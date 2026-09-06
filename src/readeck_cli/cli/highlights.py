@@ -1,18 +1,18 @@
 import click
 
-from readeck_cli.cli.output import render_records
+from readeck_cli.cli.output import render_detail_block, render_json
 from readeck_cli.commands import CommandError, get_highlights
 from readeck_cli.config import load_credentials
 
 
 def _render_highlight(record: dict[str, str]) -> str:
-    return (
-        f"Highlight {record['id']}\n"
-        f"Created: {record['created']}\n"
-        f"Color: {record['color']}\n"
-        f"Text: {record['text']}\n"
-        f"Note: {record['note']}"
-    )
+    fields = [
+        ("Created", record["created"]),
+        ("Color", record["color"]),
+        ("Text", record["text"]),
+        ("Note", record["note"]),
+    ]
+    return render_detail_block(f"Highlight {record['id']}", fields)
 
 
 @click.group(invoke_without_command=True)
@@ -47,10 +47,13 @@ def get_command(bookmark_id: str, *, as_json: bool) -> None:
     ]
 
     if as_json:
-        click.echo(render_records(records, as_json=True))
+        click.echo(render_json(records))
         return
 
-    click.echo("\n\n".join(_render_highlight(record) for record in records))
+    if records:
+        click.echo("\n\n".join(_render_highlight(record) for record in records))
+    else:
+        click.echo("No highlights found.")
 
 
 highlights_group.add_command(get_command)

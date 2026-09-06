@@ -10,6 +10,7 @@ from readeck_cli.config import BASE_URL_ENV_VAR, TOKEN_ENV_VAR
 
 if TYPE_CHECKING:
     import pytest
+    from pytest_regressions.file_regression import FileRegressionFixture
 
 BOOKMARK = Bookmark(
     id="abc123",
@@ -21,6 +22,18 @@ BOOKMARK = Bookmark(
     description="A description.",
     note="A note.",
     labels=("tech", "reading"),
+)
+
+BOOKMARK_2 = Bookmark(
+    id="def456",
+    href="/bookmarks/def456",
+    url="https://example.test/other-article",
+    title="Another article",
+    site="other.test",
+    authors=("Carol",),
+    description="A second description.",
+    note="",
+    labels=("news",),
 )
 
 
@@ -61,19 +74,18 @@ def test_list_help(monkeypatch: pytest.MonkeyPatch) -> None:
     assert "SEARCH" in result.output
 
 
-def test_list_prints_human_readable_records(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_list_prints_human_readable_records(
+    monkeypatch: pytest.MonkeyPatch, file_regression: FileRegressionFixture
+) -> None:
     _set_env(monkeypatch)
     _stub_list_bookmarks(
-        monkeypatch, bookmarks=[BOOKMARK], pagination_info=PaginationInfo(total_count=1, total_pages=1)
+        monkeypatch, bookmarks=[BOOKMARK, BOOKMARK_2], pagination_info=PaginationInfo(total_count=2, total_pages=1)
     )
 
     result = CliRunner().invoke(main, ["bookmarks", "list"])
 
     assert result.exit_code == 0
-    assert "id: abc123" in result.stdout
-    assert "title: An article" in result.stdout
-    assert "authors: Alice, Bob" in result.stdout
-    assert "labels: tech, reading" in result.stdout
+    file_regression.check(result.output, extension=".txt")
 
 
 def test_list_json_output(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -108,7 +120,7 @@ def test_list_empty_result_human(monkeypatch: pytest.MonkeyPatch) -> None:
     result = CliRunner().invoke(main, ["bookmarks", "list"])
 
     assert result.exit_code == 0
-    assert result.stdout == ""
+    assert result.stdout == "No bookmarks found.\n"
 
 
 def test_list_empty_result_json(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -121,16 +133,18 @@ def test_list_empty_result_json(monkeypatch: pytest.MonkeyPatch) -> None:
     assert json.loads(result.stdout) == []
 
 
-def test_list_prints_pagination_summary_when_multiple_pages(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_list_prints_pagination_summary_when_multiple_pages(
+    monkeypatch: pytest.MonkeyPatch, file_regression: FileRegressionFixture
+) -> None:
     _set_env(monkeypatch)
     _stub_list_bookmarks(
-        monkeypatch, bookmarks=[BOOKMARK], pagination_info=PaginationInfo(total_count=42, total_pages=5)
+        monkeypatch, bookmarks=[BOOKMARK, BOOKMARK_2], pagination_info=PaginationInfo(total_count=42, total_pages=5)
     )
 
     result = CliRunner().invoke(main, ["bookmarks", "list"])
 
     assert result.exit_code == 0
-    assert "1 of 42 across 5 page(s)" in result.stderr
+    file_regression.check(result.output, extension=".txt")
 
 
 def test_list_prints_pagination_summary_in_json_mode_too(monkeypatch: pytest.MonkeyPatch) -> None:

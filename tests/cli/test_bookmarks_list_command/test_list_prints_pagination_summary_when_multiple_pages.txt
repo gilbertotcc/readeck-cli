@@ -1,0 +1,19 @@
+An article
+  ID:          abc123
+  URL:         https://example.test/article
+  Site:        example.test
+  Authors:     Alice, Bob
+  Labels:      tech, reading
+  Description: A description.
+  Note:        A note.
+
+Another article
+  ID:          def456
+  URL:         https://example.test/other-article
+  Site:        other.test
+  Authors:     Carol
+  Labels:      news
+  Description: A second description.
+  Note:        
+
+2 of 42 across 5 page(s)

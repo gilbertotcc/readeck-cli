@@ -62,6 +62,43 @@ application logic in `commands/`, and any new HTTP calls in
   (see `.github/workflows/check-python.yml`), as three separate jobs (lint,
   typecheck, test).
 
+## CLI output regression fixtures
+
+Full human-readable CLI output — a "get"-style command's rendered record, a
+"list" command's rendered items, or a single-line summary like `bookmarks
+share`'s — is tested with
+[pytest-regressions](https://pytest-regressions.readthedocs.io/en/latest/)'
+`file_regression` fixture instead of an inline expected string, so each
+tested output scenario lives in its own reviewable `.txt` file (see
+`tests/cli/test_bookmarks_get_command/` for the current example).
+
+- One test function per output scenario, asserting
+  `file_regression.check(result.output, extension=".txt")` (`result.output`,
+  not `result.stdout` — it interleaves stdout and stderr in write order,
+  matching what actually appears on an interactive terminal). Do not
+  `@pytest.mark.parametrize` these tests: pytest-regressions sanitizes the
+  test node name into the fixture filename, and parametrize IDs make that
+  mangled and hard to scan.
+- Fixture files live at pytest-regressions' default path — a directory
+  named after the test module, sibling to it, e.g.
+  `tests/cli/test_bookmarks_get_command/<test_function_name>.txt` — not a
+  custom `basename`/`fullpath`.
+- Two equally valid ways to update a fixture: hand-edit the `.txt` file
+  first as the literal spec of desired output, then adjust the CLI code
+  until the test passes; or implement the code change first, run
+  `uv run pytest --force-regen` (or `--regen-all`), and review the diff
+  before committing. Neither is a fallback for the other — pick whichever
+  fits how you're approaching the change.
+- Never pass `--force-regen`/`--regen-all` in CI — it would make CI accept
+  whatever the code currently outputs instead of checking it against the
+  committed baseline.
+- `--json` output stays on `json.loads(result.output) == {...}` equality
+  assertions, not `file_regression` — it's a machine contract, not a
+  human-reviewed spec, so a byte-for-byte snapshot would just add noise.
+- A passing fixture only proves the output matches what was last approved,
+  not that the output is good — still run the `clig-check` skill (below)
+  whenever a fixture is added or changed.
+
 ## Working with the Bruno collection
 
 - Do not hand-edit the generated per-endpoint request files if the OpenAPI

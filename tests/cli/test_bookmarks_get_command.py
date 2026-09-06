@@ -10,6 +10,7 @@ from readeck_cli.config import BASE_URL_ENV_VAR, TOKEN_ENV_VAR
 
 if TYPE_CHECKING:
     import pytest
+    from pytest_regressions.file_regression import FileRegressionFixture
 
 
 BOOKMARK = BookmarkDetails(
@@ -18,11 +19,14 @@ BOOKMARK = BookmarkDetails(
     url="https://example.test/article",
     title="Example",
     site="example.test",
-    authors=("Jane Doe",),
+    authors=("Jane Doe", "John Smith"),
     description="A short description",
     note="My note",
-    labels=("reading",),
-    links=(BookmarkLink(title="Related", url="https://example.test/related"),),
+    labels=("reading", "tech"),
+    links=(
+        BookmarkLink(title="Related", url="https://example.test/related"),
+        BookmarkLink(title="", url="https://example.test/further"),
+    ),
 )
 
 EXPECTED_RECORD = {
@@ -31,11 +35,14 @@ EXPECTED_RECORD = {
     "url": "https://example.test/article",
     "title": "Example",
     "site": "example.test",
-    "authors": ["Jane Doe"],
+    "authors": ["Jane Doe", "John Smith"],
     "description": "A short description",
     "note": "My note",
-    "labels": ["reading"],
-    "links": [{"title": "Related", "url": "https://example.test/related"}],
+    "labels": ["reading", "tech"],
+    "links": [
+        {"title": "Related", "url": "https://example.test/related"},
+        {"title": "", "url": "https://example.test/further"},
+    ],
 }
 
 
@@ -62,29 +69,21 @@ def test_bookmarks_get_requires_credentials(monkeypatch: pytest.MonkeyPatch) -> 
     assert BASE_URL_ENV_VAR in result.output
 
 
-def test_bookmarks_get_prints_human_readable_record(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_bookmarks_get_prints_human_readable_record(
+    monkeypatch: pytest.MonkeyPatch, file_regression: FileRegressionFixture
+) -> None:
     _set_env(monkeypatch)
     monkeypatch.setattr("readeck_cli.cli.bookmarks.get_bookmark", lambda *_args, **_kwargs: BOOKMARK)
 
     result = CliRunner().invoke(main, ["bookmarks", "get", "abc123"])
 
     assert result.exit_code == 0
-    assert result.output == (
-        "Example\n"
-        "  ID:          abc123\n"
-        "  URL:         https://example.test/article\n"
-        "  Site:        example.test\n"
-        "  Authors:     Jane Doe\n"
-        "  Labels:      reading\n"
-        "  Description: A short description\n"
-        "  Note:        My note\n"
-        "\n"
-        "  Links:\n"
-        "    - Related: https://example.test/related\n"
-    )
+    file_regression.check(result.output, extension=".txt")
 
 
-def test_bookmarks_get_human_output_omits_links_section_when_empty(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_bookmarks_get_human_output_omits_links_section_when_empty(
+    monkeypatch: pytest.MonkeyPatch, file_regression: FileRegressionFixture
+) -> None:
     _set_env(monkeypatch)
     bookmark = BookmarkDetails(
         id="xyz",
@@ -103,9 +102,7 @@ def test_bookmarks_get_human_output_omits_links_section_when_empty(monkeypatch: 
     result = CliRunner().invoke(main, ["bookmarks", "get", "xyz"])
 
     assert result.exit_code == 0
-    assert "Links:" not in result.output
-    assert "Authors:     none" in result.output
-    assert "Labels:      none" in result.output
+    file_regression.check(result.output, extension=".txt")
 
 
 def test_bookmarks_get_json_output(monkeypatch: pytest.MonkeyPatch) -> None:
