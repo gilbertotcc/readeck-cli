@@ -5,12 +5,13 @@ code in this repository.
 
 ## Project state
 
-This repository is the seed of a future **Readeck CLI** (tested against Readeck
-0.23.2). The Python project scaffold exists (package, dev tooling, CI), but no
-actual CLI commands are implemented yet — `readeck_cli.main()` is still a
-placeholder. The `bruno/` API collection, reverse-engineered from Readeck's
-OpenAPI spec, is the reference for the API surface the CLI will eventually
-wrap.
+This repository is an in-progress **Readeck CLI** (tested against Readeck
+0.23.2). The Python project scaffold (package, dev tooling, CI) is in place,
+and `readeck-cli` already implements `info`, `highlights get`, and the
+`bookmarks` group (`list`, `get`, `share`) — see the README's Commands
+section for the full list. The `bruno/` API collection, reverse-engineered
+from Readeck's OpenAPI spec, remains the reference for the rest of the API
+surface the CLI has yet to wrap.
 
 ## Repository layout
 
@@ -32,6 +33,23 @@ wrap.
 - `ruff.toml`, `mypy.ini`, `pytest.ini` — standalone tool configs (not
   `[tool.*]` tables in `pyproject.toml`) for lint/format, type checking, and
   tests, respectively.
+
+## Architecture
+
+`src/readeck_cli/` is layered:
+
+- `cli/` — Click command/group definitions and output rendering
+  (`output.py`). Calls into `commands/`; never imports
+  `readeck_cli.infrastructure` directly.
+- `commands/` — application logic per API area (`bookmarks.py`,
+  `highlights.py`, `info.py`). The only layer allowed to import
+  `readeck_cli.infrastructure`.
+- `infrastructure/readeck_client/` — the low-level Readeck API client
+  (HTTP requests, pagination, config, errors).
+
+New commands must follow this layering: Click plumbing goes in `cli/`,
+application logic in `commands/`, and any new HTTP calls in
+`infrastructure/readeck_client/`.
 
 ## Python tooling
 
