@@ -23,10 +23,10 @@ This checklist is also used by the `clig-check` skill (see
 
 ### Naming & structure
 
-- Subcommands follow a consistent noun/verb pattern. Actual command and
-  subcommand names are a separate, not-yet-decided project choice — this
-  checklist only requires that whatever names are chosen stay internally
-  consistent.
+- Subcommands follow a consistent noun/verb pattern: a resource noun as
+  the command group (`bookmarks`, `highlights`) with verb subcommands
+  (`list`, `get`, `share`), or a bare noun for a single-purpose command
+  (`info`). New commands must follow the same pattern.
 - A flag means the same thing, and behaves the same way, everywhere it
   appears (e.g. `-o`/`--output`, `--format`).
 
